@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Memory - Protocolo INVIAS</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+
+<body class="light-theme">
+    <div class="app-container">
+        <!-- Sidebar Izquierdo -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">🧠</div>
+                <h1>La Memoria Inteligente</h1>
+            </div>
+            <nav class="procedures-nav">
+                <ul id="procedure-list">
+                    <!-- Dynamic Items -->
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <p>Manual: Protocolo INVIAS</p>
+                <span class="status-badge connected">Conectado a NotebookLM</span>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <div class="view-title">
+                    <h2 id="current-procedure-title">Panel de Control General</h2>
+                    <p id="current-procedure-subtitle">Asesoría Técnica y Legal</p>
+                </div>
+                <div class="header-actions">
+                    <button id="btn-export" class="btn btn-secondary">Exportar Historial</button>
+                    <div class="search-bar">
+                        <input type="text" placeholder="Buscar en el manual..." id="global-search">
+                    </div>
+                </div>
+            </header>
+
+            <section class="chat-section">
+                <div id="chat-messages" class="chat-container">
+                    <div class="bot-message">
+                        <p>Bienvenido a <strong>Smart Memory</strong>. He indexado el <strong>Protocolo INVIAS</strong>.
+                            Selecciona un procedimiento a la izquierda para ver su checklist y grafo, o hazme una
+                            pregunta técnica.</p>
+                        <div class="demo-prompts">
+                            <span class="prompt-chip"
+                                onclick="app.sendQuery('¿Cuáles son los requisitos previos para la orden de inicio de obra?')">Requisitos
+                                Inicio de Obra</span>
+                            <span class="prompt-chip"
+                                onclick="app.sendQuery('¿Cómo se tramita un ítem no previsto?')">Trámite de Ítems no
+                                Previstos</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <div class="input-wrapper">
+                        <textarea id="user-input" placeholder="Pregunta sobre el Protocolo INVIAS..."></textarea>
+                        <button id="send-btn" class="send-btn">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Sidebar Derecho (Grafo / Detalles) -->
+        <aside class="details-panel">
+            <div class="panel-tabs">
+                <button class="tab-link active" onclick="app.switchSideTab('graph', event)">Relaciones</button>
+                <button class="tab-link" onclick="app.switchSideTab('info', event)">Detalles</button>
+            </div>
+
+            <div class="tab-content-scroll">
+                <div id="side-tab-graph" class="tab-content active">
+                    <div class="graph-viewer">
+                        <div class="mermaid" id="mermaid-graph">
+                            graph TD
+                            A[INVIAS] --> B[Obra]
+                            A --> C[Interventoría]
+                        </div>
+                    </div>
+                </div>
+
+                <div id="side-tab-info" class="tab-content">
+                    <div id="entity-details" class="entity-details">
+                        <p class="empty-state">Selecciona un procedimiento o consulta para ver vínculos detallados.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="details-actions">
+                <h4>Opciones de Checklist</h4>
+                <div class="action-buttons-grid">
+                    <button class="btn btn-secondary"
+                        onclick="app.showChecklist(app.currentProcedure?.id || 'inicio')">Ver Checklist</button>
+                    <button class="btn btn-primary" onclick="app.exportToCSV()">Exportar CSV</button>
+                    <button class="btn btn-secondary" style="grid-column: span 2;" onclick="app.shareApp()">Compartir
+                        Acceso</button>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Modals -->
+    <div id="checklist-modal" class="modal">
+        <div class="modal-content large">
+            <header class="modal-header">
+                <h2 id="checklist-title">Checklist de Ejecución</h2>
+                <button class="close-modal">&times;</button>
+            </header>
+            <div class="modal-body">
+                <table class="checklist-table">
+                    <thead>
+                        <tr>
+                            <th>Check</th>
+                            <th>Paso / Requisito</th>
+                            <th>Responsable</th>
+                            <th>Evidencia</th>
+                            <th>Cita PDF</th>
+                        </tr>
+                    </thead>
+                    <tbody id="checklist-body"></tbody>
+                </table>
+            </div>
+            <footer class="modal-footer">
+                <button id="btn-csv" class="btn btn-primary">Exportar CSV</button>
+            </footer>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
