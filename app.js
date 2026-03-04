@@ -132,61 +132,212 @@ const KNOWLEDGE_BASE = [
     {
         id: "kb-inicio",
         keywords: ["inicio", "orden", "rti", "reunion tecnica", "visita previa", "compromisos"],
-        responseContent: "El procedimiento para el inicio de ejecución (`MEPI-MN1-IN-1`) exige la sincronización estricta entre Obra e Interventoría. La **Reunión Técnica Inicial (RTI)** es el hito obligatorio que debe ocurrir máximo a los 3 días hábiles de la orden de inicio. Previo a esto, es imperativo realizar una **visita conjunta al sitio** con registro fotográfico y de video referenciado (PR, fecha). Los compromisos técnicos resultantes deben atenderse en un plazo no mayor a 8 días hábiles.",
+        responseContent: `
+#### Procedimiento de Inicio de Ejecución (MEPI-MN1-IN-1)
+
+El instructivo establece el marco para la transición entre la adjudicación y el arranque material de las labores.
+
+**Requisitos Previos y Orden de Inicio:**
+*   **Base Administrativa:** Es obligatorio contar con el **Registro Presupuestal (RP)** y la aprobación de garantías/seguros.
+*   **Sincronización:** La ejecución de obra **NO** debe iniciarse antes de la orden de inicio de la interventoría.
+*   **SECOP II:** El cambio de estado a "en ejecución" en la plataforma surte efectos de notificación oficial.
+
+**Hitos Iniciales:**
+1.  **Visita Conjunta (Obligatoria):** Inspección de terreno con levantamiento multimedia (videos y fotos referenciadas con PR y fecha).
+2.  **Reunión Técnica Inicial (RTI):** Debe ocurrir máximo a los **3 días hábiles** de la orden de inicio.
+3.  **Apertura de Bitácora:** Debe realizarse el mismo día de la RTI con páginas foliadas y bajo custodia de la Interventoría.
+
+**Plazos de Compromisos:**
+Los compromisos pactados en el acta RTI tienen un plazo máximo de cumplimiento de **8 días hábiles**.`,
         evidence: [
             { source_id: "MEPI-MN1-IN-1", source_name: "Instructivo Inicio Ejecución", snippet: "La ejecución del contrato de obra no debe iniciarse con anterioridad a la orden de inicio del contrato de interventoría." },
-            { source_id: "MEPI-MN1-IN-1", source_name: "Instructivo Inicio Ejecución", snippet: "Máximo dentro de los tres (3) días hábiles siguientes se debe realizar una reunión técnica... Previa se debe efectuar una visita conjunta al sitio... realizando videos y fotografías referenciados." },
-            { source_id: "MEPI-MN1-IN-1", source_name: "Instructivo Inicio Ejecución", snippet: "Establecer los plazos para su cumplimiento teniendo en cuenta, en todo caso, un plazo máximo de ocho (8) días hábiles." }
+            { source_id: "MEPI-MN1-IN-1", source_name: "Instructivo Inicio Ejecución", snippet: "Máximo dentro de los tres (3) días hábiles siguientes se debe realizar una reunión técnica... Previa se debe efectuar una visita conjunta al sitio." },
+            { source_id: "MEPI-MN1-IN-1", source_name: "Instructivo Inicio Ejecución", snippet: "Los compromisos pactados deben tener un plazo máximo de cumplimiento de ocho (8) días hábiles." }
         ],
-        location: "Sección IX: Acta de Reunión Técnica Inicial | Sección VI: Orden de Inicio",
+        location: "MEPI-MN1-IN-1 Sección VI | Sección IX",
         tags: ["RTI", "Visita Conjunta", "Sincronización"]
     },
     {
-        id: "kb-apu",
-        keywords: ["apu", "no previsto", "items", "cotizaciones", "precios", "fijacion"],
-        responseContent: "Para la aprobación de **Ítems No Previstos** bajo el `MEPI-MN1-IN-10`, el interventor tiene prohibido permitir ejecuciones sin la suscripción previa del **Acta de Fijación (FR-4)**. La solicitud requiere una carpeta foliada con: 1) Justificación Técnica/Económica/Jurídica, 2) Tres cotizaciones de la zona o la más cercana, y 3) Análisis comparativo con precios de referencia de la web de INVIAS.",
+        id: "kb-apu-detallado",
+        keywords: ["apu", "no previsto", "items", "cotizaciones", "precios", "fijación", "fijacion"],
+        responseContent: `
+#### Procedimiento de APU e Ítems no Previstos (MEPI-MN1-IN-10)
+
+La aprobación de nuevas actividades exige una justificación técnica, económica y jurídica rigurosa.
+
+**Requisitos de la Carpeta:**
+*   **Solicitud formal:** Firmada por el Representante Legal con justificación de impacto en metas físicas.
+*   **Consulta de precios oficial:** Copia de consulta en web de INVIAS y análisis comparativo.
+*   **Formato APU (FR-1):** Diligenciado con memorias técnicas de cantidades y rendimientos.
+
+**Gestión de Cotizaciones:**
+*   **Mínimo 3 cotizaciones:** Obligatorias para insumos nuevos.
+*   **Procedencia:** Deben ser de la zona del proyecto o la más cercana.
+*   **Vigencia:** Deben estar vigentes y provenir de distribuidores autorizados.
+
+**Prohibición de Ejecución:**
+Es **OBLIGATORIO** contar con el **Acta de Fijación (FR-4)** firmada antes de iniciar cualquier labor. El Interventor tiene prohibido permitir ejecuciones sin este documento suscrito.`,
         evidence: [
             { source_id: "MEPI-MN1-IN-10", source_name: "Instructivo APU", snippet: "El Interventor no debe permitir la ejecución de actividades correspondientes a ítems no previstos, sin la suscripción del formato MEPI-MN1-IN-10-FR-4." },
-            { source_id: "MEPI-MN1-IN-10", source_name: "Instructivo APU", snippet: "Tres (3) cotizaciones de los nuevos insumos... obtenidas en la zona del proyecto o en su defecto en la zona más cercana." },
-            { source_id: "MEPI-MN1-IN-10", source_name: "Instructivo APU", snippet: "Si el precio acordado resultare ser mayor al establecido en la página WEB del INVIAS, el Interventor debe presentar por escrito la justificación." }
+            { source_id: "MEPI-MN1-IN-10", source_name: "Instructivo APU", snippet: "Tres (3) cotizaciones de los nuevos insumos... obtenidas en la zona del proyecto." }
         ],
-        location: "Sección VII: Acta de Fijación | Sección VIII: Procedimiento",
-        tags: ["FR-4", "Cotizaciones", "Justificación"]
+        location: "MEPI-MN1-IN-10 Sección VII | Sección IX",
+        tags: ["APU", "FR-4", "No Previstos"]
     },
     {
-        id: "kb-suspension",
-        keywords: ["suspension", "reanudacion", "secop", "garantias", "plazo"],
-        responseContent: "La **Suspensión** de un contrato (`MEPI-MN1-IN-11`) solo es procedente por fuerza mayor, caso fortuito o interés público. Un punto crítico es que la suspensión de interventoría implica la **suspensión simultánea** de la obra. La validez legal depende de la firma en **SECOP II**, cuya fecha prima sobre el formato físico. Tras la reanudación, el contratista tiene solo 3 días hábiles para actualizar las garantías.",
+        id: "kb-fcs",
+        keywords: ["fcs", "factor de compensacion social", "compensación social", "social factors"],
+        responseContent: `
+#### Análisis Jurídico de los Factores de Compensación Social (FCS)
+
+De acuerdo con la documentación del **Instituto Nacional de Vías (INVIAS)** y la **Resolución 7310 de 2015**, los Factores de Compensación Social se consideran herramientas fundamentales para prevenir y mitigar los impactos socioeconómicos en procesos de adquisición predial.
+
+**Condiciones generales para su cálculo:**
+*   **Enajenación voluntaria:** Solo procede si la adquisición se realiza de forma concertada. La expropiación anula este beneficio.
+*   **Diagnóstico de vulnerabilidad:** Requiere una **Ficha Socioeconómica** pormenorizada que analice ingresos, escolaridad, carga de dependencia y discapacidad.
+*   **Base de cálculo:** Referenciada en el Salario Mínimo Legal Vigente (**SMLV**) y el avalúo comercial.
+
+**Tipología y Metodología de Aplicación:**
+1.  **Factor de Unidad Mínima de Vivienda (UMV):** Compensa si el avalúo de mejoras es inferior al valor de una vivienda VIP (Vivienda de Interés Prioritario).
+2.  **Factor por Unidad Mínima Económica (UME):** Reconocimiento por suspensión de actividades económicas que sean único medio de subsistencia (arraigo > 1 año).
+3.  **Factor por Traslado (TDO):** Cubre gastos de mudanza para unidades vulnerables.
+4.  **Factor por Hacinamiento (HTO):** Se activa cuando la vivienda es habitada por 6 o más personas.
+5.  **Factor de Arrendamiento Provisional:** Cubre costos de alquiler ante desplazamiento involuntario.
+
+Este proceso requiere concepto de aprobación de la **Interventoría** y no objeción de la Subdirección de Sostenibilidad de INVIAS.`,
         evidence: [
-            { source_id: "MEPI-MN1-IN-11", source_name: "Instructivo Suspensión", snippet: "La suspensión del contrato de interventoría conlleva a la suspensión simultánea del contrato de obra." },
-            { source_id: "MEPI-MN1-IN-11", source_name: "Instructivo Suspensión", snippet: "Prima la fecha indicada en la plataforma [SECOP II] sobre la señalada en el formato." },
-            { source_id: "MEPI-MN1-IN-11", source_name: "Instructivo Suspensión", snippet: "Dentro de los tres (3) días hábiles siguientes a la fecha de reanudación... obligan a presentar para su aprobación los certificados de modificación de la garantía única." }
+            { source_id: "MEPI-Manual", source_name: "Resolución 7310", snippet: "Los FCS se calculan y reconocen como una medida para prevenir, mitigar y compensar los impactos socioeconómicos" },
+            { source_id: "MEPI-Manual", source_name: "Resolución 7310", snippet: "El reconocimiento de los FCS solo es viable si la adquisición del predio se realiza por enajenación voluntaria." }
         ],
-        location: "Sección III: Generalidades | Sección IV: Acta de Suspensión",
-        tags: ["SECOP II", "Garantías", "Simultaneidad"]
+        location: "Resolución 7310 de 2015 | Ficha Socioeconómica",
+        tags: ["FCS", "Compensación", "Social"]
+    },
+    {
+        id: "kb-suspension-detallada",
+        keywords: ["suspensión", "reanudación", "secop", "garantías"],
+        responseContent: `
+#### Procedimiento de Suspensión y Reanudación (MEPI-MN1-IN-11)
+
+Según el manual MEPI, el proceso de suspensión es crítico para la seguridad jurídica del contrato.
+
+**Causales y Condiciones:**
+*   Procede por **fuerza mayor, caso fortuito o interés público**.
+*   **Simultaneidad:** La suspensión de interventoría implica obligatoriamente la de obra.
+
+**Formalidades en SECOP II:**
+*   **Primacía Digital:** La fecha que prima es la registrada en la plataforma **SECOP II**, no la del acta física.
+*   **Validez:** No se entiende suspendido sin la firma electrónica del funcionario competente.
+
+**Actualización de Garantías:**
+*   Es obligación del contratista actualizar las pólizas ampliando la vigencia por el tiempo de suspensión.
+*   **Plazo Fatal:** Máximo **3 días hábiles** tras la reanudación para presentar los certificados de modificación ante el Instituto, so pena de acciones legales.`,
+        evidence: [
+            { source_id: "MEPI-MN1-IN-11", source_name: "Instructivo Suspensión", snippet: "Prima la fecha indicada en la plataforma [SECOP II] sobre la señalada en el formato." },
+            { source_id: "MEPI-MN1-IN-11", source_name: "Instructivo Suspensión", snippet: "Dentro de los tres (3) días hábiles siguientes a la fecha de reanudación... obligan a presentar... certificados de modificación." }
+        ],
+        location: "MEPI-MN1-IN-11 Sección IV | Gestión SECOP II",
+        tags: ["Suspensión", "SECOP II", "Garantías"]
+    },
+    {
+        id: "kb-adicion",
+        keywords: ["adición", "adicion", "prórroga", "prorroga", "modificación", "modificacion", "30 días", "comité"],
+        responseContent: `
+#### Adición, Modificación y Prórroga (MEPI-MN1-IN-12 / IN-13)
+
+Cualquier alteración en tiempo, alcance o presupuesto debe estar plenamente justificada y legalizada.
+
+**La Regla de los 30 Días:**
+Toda solicitud formal, con soportes originales suscritos, debe presentarse a la Unidad Ejecutora con una **antelación mínima de 30 días calendario** al vencimiento del contrato.
+
+**Requisitos de Viabilidad:**
+*   **Concepto de Sostenibilidad:** Si afecta recursos ambientales, sociales o prediales, requiere concepto previo favorable de la Subdirección de Sostenibilidad.
+*   **Vigencias Futuras:** Obligatorias si la prórroga trasciende la vigencia fiscal en curso.
+*   **Comité de Contratación:** Máximo filtro de control. Su aprobación por sí sola no autoriza la ejecución; se requiere la suscripción de la **Minuta**.
+
+**Legalización:**
+Es requisito ineludible la **actualización de garantías** antes de la firma de la minuta. Tras la suscripción, se deben ajustar los Programas de Obra e Inversión.`,
+        evidence: [
+            { source_id: "MEPI-MN1-IN-12", source_name: "Instructivo Adición", snippet: "Presentar a la Unidad Ejecutora la solicitud formal... con una antelación mínima de treinta (30) días calendario." },
+            { source_id: "MEPI-MN1-IN-12", source_name: "Instructivo Adición", snippet: "Se requiere obligatoriamente de la suscripción y legalización de la minuta contractual." }
+        ],
+        location: "MEPI-MN1-IN-12 Sección IV | Sección VII",
+        tags: ["Adición", "Prórroga", "Comité de Contratación"]
+    },
+    {
+        id: "kb-informes",
+        keywords: ["informe semanal", "informe mensual", "jueves", "fr-1", "fr-3", "seguridad social", "pago"],
+        responseContent: `
+#### Informes Semanales y Mensuales (MEPI-MN1-IN-15)
+
+Sistema de seguimiento estandarizado para documentar el avance físico y financiero del proyecto.
+
+**Informe Semanal (FR-3):**
+*   **Corte de Tiempo:** La fecha de corte es estrictamente todos los **días JUEVES**.
+*   **Contenido:** Gráfico de avance, indicador I/C y registro fotográfico comparativo (antes, durante y después).
+
+**Informe Mensual (FR-1):**
+*   **Obligatoriedad:** El formato **FR-1 (Lista de Chequeo)** debe ser obligatoriamente la **PÁGINA UNO (1)** del informe.
+*   **Orden:** Los documentos deben seguir exactamente el orden de la lista de chequeo con folios coincidentes.
+
+**Seguridad Social y Pago:**
+*   **Control Laboral (FR-6/7):** El Interventor debe verificar el pago de aportes de ley y parafiscales, cruzándolos con la **nómina electrónica**.
+*   **Condición de Pago:** La radicación completa del Informe Mensual es requisito indispensable para autorizar el pago de la interventoría.`,
+        evidence: [
+            { source_id: "MEPI-MN1-IN-15", source_name: "Instructivo Informes", snippet: "Su fecha de corte es siempre el día jueves." },
+            { source_id: "MEPI-MN1-IN-15", source_name: "Instructivo Informes", snippet: "Este formato [FR-1] debe ser obligatoriamente la página uno (1) del informe." },
+            { source_id: "MEPI-MN1-IN-15", source_name: "Instructivo Informes", snippet: "La presentación completa del Informe Mensual... es un requisito indispensable para la autorización del pago." }
+        ],
+        location: "MEPI-MN1-IN-15 Sección IV | Control Laboral",
+        tags: ["Informes", "FR-1", "Corte Jueves", "Seguridad Social"]
     },
     {
         id: "kb-recibo",
-        keywords: ["recibo", "definitivo", "visita previa", "pendiente", "planos record", "sancionatorio", "entrega"],
-        responseContent: "El proceso de **Recibo Definitivo** (`MEPI-MN1-IN-16`) se activa con una **Visita Previa** obligatoria (mínimo 30 días antes del vencimiento). Si el contratista no atiende los pendientes de esta visita, el interventor debe recibir la obra 'en el estado en que se encuentre', cuantificar lo no ejecutado para descuento en el acta final e iniciar el Proceso Administrativo Sancionatorio (P.A.S.).",
+        keywords: ["recibo", "definitivo", "visita previa", "pendiente", "planos record", "sancionatorio", "entrega", "liquidación"],
+        responseContent: `
+#### Recibo Definitivo y Liquidación (MEPI-MN1-IN-16 / IN-18)
+
+Cierre estructurado para salvaguardar recursos y garantizar la calidad de la infraestructura.
+
+**Fase 1: Visita Previa (La Regla de los 30 Días):**
+*   **Temporalidad:** Realizar visita conjunta **30 días calendario** antes del vencimiento (15 días si el contrato < 6 meses).
+*   **Objetivo:** Inspeccionar y documentar con el formato **FR-1** todas las correcciones obligatorias.
+*   **Verificación SIG:** Se deben validar los **planos récord (As-built)** y su compatibilidad con el sistema SIG del INVÍAS.
+
+**Fase 2: Entrega y Recibo Definitivo (FR-2):**
+*   **Hito Técnico:** Se materializa al vencimiento del plazo. Si hay pendientes no corregidos, se recibe la obra "en el estado en que se encuentre" SIN pagar lo defectuoso.
+*   **Consecuencias:** Detona el **Proceso Administrativo Sancionatorio** y descuentos económicos inmediatos.
+
+**Fase 3: Liquidación Contractual:**
+*   **Bilateral:** De mutuo acuerdo; balance jurídico y contable final. El contratista puede dejar **salvedades** expresas.
+*   **Unilateral:** Facultad excepcional del INVÍAS si el contratista no comparece o no hay acuerdo (dentro de los 2 meses siguientes).
+*   **Saldos:** Se cruza lo ejecutado contra lo pagado, resultando en saldos a favor o en contra según los formatos FR-3/4.`,
         evidence: [
-            { source_id: "MEPI-MN1-IN-16", source_name: "Visita y Recibo Definitivo", snippet: "Con una antelación mínima de treinta (30) días calendario... la Interventoría debe realizar visita conjunta... con el fin de inspeccionar el estado." },
-            { source_id: "MEPI-MN1-IN-16", source_name: "Visita y Recibo Definitivo", snippet: "Si las observaciones... no son atendidos... el Interventor debe proceder a efectuar el recibo definitivo de las obras en el estado en que se encuentren." },
-            { source_id: "MEPI-MN1-IN-16", source_name: "Visita y Recibo Definitivo", snippet: "Circunstancia que dará lugar a la aplicación de los procedimientos administrativos sancionatorios y a la cuantificación de las obras no corregidas... deben ser descontadas." }
+            { source_id: "MEPI-MN1-IN-16", source_name: "Visita y Recibo Definitivo", snippet: "Antelación mínima de treinta (30) días calendario... la Interventoría debe realizar visita conjunta." },
+            { source_id: "MEPI-MN1-IN-16", source_name: "Visita y Recibo Definitivo", snippet: "Recibir las obras 'en el estado en que se encuentren'... lo que dará lugar a la aplicación de procedimientos sancionatorios." },
+            { source_id: "MEPI-MN1-IN-18", source_name: "Instructivo Liquidación", snippet: "El INVIAS tiene la facultad de liquidar unilateralmente dentro de los dos (2) meses siguientes." }
         ],
-        location: "Sección IV: Visita Previa | Sección V: Entrega y Recibo Definitivo",
-        tags: ["P.A.S.", "Visita Previa", "Estado Actual"]
+        location: "MEPI-MN1-IN-16 Sección IV | MEPI-MN1-IN-18 Sección V",
+        tags: ["Recibo Definitivo", "Liquidación", "FR-2", "Unilateral"]
     },
     {
         id: "kb-firma-negacion",
         keywords: ["firma", "negacion", "negación", "negativa", "niega", "rechazo", "acta", "suscribirla"],
-        responseContent: "Ante la **negación de firma** de un acta (especialmente la de Recibo Definitivo), el Interventor tiene la obligación de **suscribirla de todas formas**. Es imperativo dejar constancia escrita de la citación previa realizada al contratista y de su negativa expresa o tácita a firmar. Si esto ocurre en la fase de liquidación, se faculta al INVÍAS para proceder con la **Liquidación Unilateral** del contrato.",
+        responseContent: `
+#### Protocolo ante Negación de Firma de Actas
+
+Ante la negativa del Contratista para suscribir documentos oficiales, el Interventor debe seguir un protocolo de Blindaje Jurídico.
+
+**Acciones Inmediatas:**
+*   **Suscripción Obligatoria:** El Interventor debe suscribir el acta en todo caso, incluso sin la firma de la contraparte.
+*   **Constancia de Citación:** Es imperativo dejar registro escrito de la citación previa y la negativa expresa o tácita.
+
+**Efectos en Liquidación:**
+*   La falta de comparecencia faculta al INVÍAS para proceder con la **Liquidación Unilateral** mediante acto administrativo motivado.`,
         evidence: [
-            { source_id: "MEPI-MN1-IN-16", source_name: "Visita y Recibo Definitivo", snippet: "En caso de que el contratista se niegue a firmar el acta, el Interventor debe proceder en todo caso a suscribirla, dejando constancia de la citación y la negativa." },
-            { source_id: "MEPI-Manual", source_name: "Manual de Contratación", snippet: "Si el contratista no asiste a la diligencia de liquidación o se niega a suscribir el acta, la entidad estatal la liquidará unilateralmente mediante acto administrativo motivado." }
+            { source_id: "MEPI-MN1-IN-16", source_name: "Visita y Recibo Definitivo", snippet: "En caso de que el contratista se niegue a firmar el acta, el Interventor debe proceder en todo caso a suscribirla." }
         ],
-        location: "MEPI-MN1-IN-16 Sección V | Manual de Contratación INVÍAS Section 11.1",
-        tags: ["Negación de Firma", "Liquidación Unilateral", "Constancia"]
+        location: "MEPI-MN1-IN-16 Sección V | Manual de Contratación Section 11.1",
+        tags: ["Firma", "Blindaje Jurídico", "Liquidación"]
     }
 ];
 
@@ -363,8 +514,29 @@ const app = {
         const div = document.createElement('div');
         div.className = `${type}-message animate-fade-in`;
 
-        // Formateo enriquecido
-        let formattedText = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+        // Formateo de Markdown simple (NotebookLM Style)
+        let formattedText = text;
+
+        // Headers ####
+        formattedText = formattedText.replace(/#### (.*)/g, '<h4>$1</h4>');
+
+        // 1. Bold text **text**
+        formattedText = formattedText.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+        // 2. Unordered lists (groups of lines starting with *)
+        formattedText = formattedText.replace(/(?:^\* .*(?:\r?\n|$))+/gm, (match) => {
+            const items = match.trim().split('\n').map(li => `<li>${li.replace(/^\* /, '')}</li>`).join('');
+            return `<ul>${items}</ul>`;
+        });
+
+        // 3. Ordered lists (groups of lines starting with 1. 2. etc)
+        formattedText = formattedText.replace(/(?:^\d+\. .*(?:\r?\n|$))+/gm, (match) => {
+            const items = match.trim().split('\n').map(li => `<li>${li.replace(/^\d+\. /, '')}</li>`).join('');
+            return `<ol>${items}</ol>`;
+        });
+
+        // 4. Line breaks and paragraphs
+        formattedText = formattedText.replace(/\n\n/g, '</p><p>');
         formattedText = formattedText.replace(/\n/g, '<br>');
 
         // Resaltar y hacer vinculables los formularios FR-X
@@ -375,9 +547,9 @@ const app = {
 
         // Auto-bolding para términos críticos (como 'Suspensión')
         if (type === 'bot') {
-            const criticalTerms = ['Suspensión', 'Reanudación', 'MEPI'];
+            const criticalTerms = ['REQUISITO', 'OBLIGATORIO', 'PLAZO', 'SECOP II'];
             criticalTerms.forEach(term => {
-                const regex = new RegExp(`(${term})`, 'gi');
+                const regex = new RegExp(`\\b(${term})\\b`, 'g');
                 formattedText = formattedText.replace(regex, '<strong>$1</strong>');
             });
         }
@@ -467,8 +639,10 @@ const app = {
                 "firma": ["suscripción", "suscripcion", "firmar", "legalizar", "suscribir"],
                 "negacion": ["negativa", "no quiere", "rechazo", "se niega", "objetar"],
                 "recibo": ["entrega", "finalización", "terminación", "liquidación"],
-                "suspension": ["interrupción", "parar", "frenar", "congelar"],
-                " items": ["apu", "precios", "actividades no previstas"]
+                "suspension": ["interrupción", "parar", "frenar", "congelar", "reanudación", "reanudacion"],
+                "items": ["apu", "precios", "actividades no previstas", "no previstos"],
+                "adición": ["adicion", "prórroga", "prorroga", "ampliación", "modificación", "modificacion"],
+                "informes": ["semanal", "mensual", "seguimiento", "jueves", "fr-3", "fr-1", "reporte"]
             };
 
             let expandedTerms = [q];
