@@ -39,7 +39,6 @@
                     <p id="current-procedure-subtitle">Asesoría Técnica y Legal</p>
                 </div>
                 <div class="header-actions">
-                    <button id="btn-export" class="btn btn-secondary">Exportar Historial</button>
                     <div class="search-bar">
                         <input type="text" placeholder="Buscar en el manual..." id="global-search">
                     </div>
@@ -75,39 +74,73 @@
             </section>
         </main>
 
-        <!-- Sidebar Derecho (Grafo / Detalles) -->
+        <!-- Sidebar Derecho (Relaciones / Detalles / Manual) -->
         <aside class="details-panel">
             <div class="panel-tabs">
                 <button class="tab-link active" onclick="app.switchSideTab('graph', event)">Relaciones</button>
                 <button class="tab-link" onclick="app.switchSideTab('info', event)">Detalles</button>
+                <button class="tab-link" onclick="app.switchSideTab('manual', event)">Manuales</button>
             </div>
 
             <div class="tab-content-scroll">
+                <!-- Tab: Relaciones -->
                 <div id="side-tab-graph" class="tab-content active">
-                    <div class="graph-viewer">
-                        <div class="mermaid" id="mermaid-graph">
-                            graph TD
-                            A[INVIAS] --> B[Obra]
-                            A --> C[Interventoría]
-                        </div>
+                    <div id="relations-list-container" class="relations-list">
+                        <!-- Botones de relaciones -->
+                        <p class="empty-state" style="padding: 20px; font-size: 0.8rem; color: var(--text-muted);">
+                            Seleccione un procedimiento para ver sus relaciones clave.
+                        </p>
+                    </div>
+                    <!-- Mermaid fallback hidden by default -->
+                    <div class="graph-viewer" style="display: none;">
+                        <div class="mermaid" id="mermaid-graph"></div>
                     </div>
                 </div>
 
+                <!-- Tab: Detalles -->
                 <div id="side-tab-info" class="tab-content">
                     <div id="entity-details" class="entity-details">
-                        <p class="empty-state">Selecciona un procedimiento o consulta para ver vínculos detallados.</p>
+                        <p class="empty-state">Selecciona un elemento para ver su análisis detallado.</p>
+                    </div>
+                </div>
+
+                <!-- Tab: Manuales -->
+                <div id="side-tab-manual" class="tab-content">
+                    <div style="padding: 10px 15px; border-bottom: 1px solid var(--border); background: #f8fafc;">
+                        <input type="text" id="manual-sidebar-search" placeholder="Filtrar documentos..."
+                            onkeyup="app.renderManual(this.value)"
+                            style="width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border); font-size: 0.8rem;">
+                    </div>
+                    <div class="manual-menu" id="manual-sections-container">
+                        <!-- Sections: Gestión técnica, ambiental, social, predial, sostenibilidad -->
+                    </div>
+                    <div class="export-group">
+                        <button class="export-btn" onclick="app.exportManualCSV('all')">
+                            <span>📊</span> Exportar CSV (Todo)
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <div class="details-actions">
-                <h4>Opciones de Checklist</h4>
-                <div class="action-buttons-grid">
-                    <button class="btn btn-secondary"
-                        onclick="app.showChecklist(app.currentProcedure?.id || 'inicio')">Ver Checklist</button>
-                    <button class="btn btn-primary" onclick="app.exportToCSV()">Exportar CSV</button>
-                    <button class="btn btn-secondary" style="grid-column: span 2;" onclick="app.shareApp()">Compartir
-                        Acceso</button>
+            <div id="trivia-container" class="trivia-box minimized">
+                <div class="trivia-header" onclick="app.toggleTrivia()">
+                    <h4>Desafío Técnico (Trivia)</h4>
+                    <button class="minimize-btn" id="trivia-toggle-icon">+</button>
+                </div>
+                <div id="trivia-content" class="trivia-content" style="display:none;">
+                    <div class="timer-area">
+                        <span id="trivia-timer">5</span>s
+                        <div class="timer-progress">
+                            <div id="trivia-timer-fill"></div>
+                        </div>
+                    </div>
+                    <p id="trivia-question" class="trivia-question">Cargando desafío...</p>
+                    <div id="trivia-options" class="trivia-options"></div>
+                    <div id="trivia-feedback" class="trivia-feedback"></div>
+                    <div class="trivia-footer">
+                        <canvas id="trivia-graph" width="300" height="40"></canvas>
+                        <div class="score-display">Puntaje: <span id="trivia-score">0</span></div>
+                    </div>
                 </div>
             </div>
         </aside>

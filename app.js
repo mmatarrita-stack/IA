@@ -4,6 +4,8 @@
  * DATA SOURCE: MEPI-MN1-IN (Manual de Estándares de Procesos de Interventoría)
  */
 
+
+
 const PROCEDURE_INDEX = {
     "inicio": {
         id: "inicio",
@@ -114,78 +116,115 @@ const PROCEDURE_INDEX = {
             { step: "Liquidación del Contrato", evidence: "Acta de Liquidación", responsible: "Unidad Ejecutora", citation: "Cruce de cuentas final y liberación de saldos remanentes." }
         ],
         graph: `graph TD
-            VP[Visita Previa -30 días] --> COR[Correcciones Técnicas]
-            COR --> RD[Recibo Definitivo FR-1]
+            VP[Visita Previa -30 días] --> CT[Correcciones Técnicas]
+            CT --> RD[Recibo Definitivo FR-1]
             RD --> LIQ[Liquidación Final]
             VP -- No Cumple --> PAS[Proceso Sancionatorio]
-            VP -- No Cumple --> DES[Descuento Económico]
-            click VP call app.showDocs("recibo")
-            click COR call app.showDocs("recibo")
-            click RD call app.showDocs("recibo")
-            click LIQ call app.showDocs("recibo")
-            click PAS call app.showDocs("recibo")
-            click DES call app.showDocs("recibo")`
+            VP -- No Cumple --> DES[Descuento Económico]`
     }
 };
 
 const KNOWLEDGE_BASE = [
     {
         id: "kb-inicio",
+        procedureId: "inicio",
         keywords: ["inicio", "orden", "rti", "reunion tecnica", "visita previa", "compromisos"],
         responseContent: `
-#### Procedimiento de Inicio de Ejecución (MEPI-MN1-IN-1)
+#### Análisis Integral: Inicio de Ejecución (MEPI-MN1-IN-1)
 
-El instructivo establece el marco para la transición entre la adjudicación y el arranque material de las labores.
+El inicio de un proyecto bajo la normativa INVÍAS no es un acto meramente administrativo, sino un hito logístico y jurídico que sincroniza dos contratos independientes (Obra e Interventoría).
 
-**Requisitos Previos y Orden de Inicio:**
-*   **Base Administrativa:** Es obligatorio contar con el **Registro Presupuestal (RP)** y la aprobación de garantías/seguros.
-*   **Sincronización:** La ejecución de obra **NO** debe iniciarse antes de la orden de inicio de la interventoría.
-*   **SECOP II:** El cambio de estado a "en ejecución" en la plataforma surte efectos de notificación oficial.
+**1. Sincronización de Órdenes (FR-1 y FR-2):**
+*   **Regla de Oro:** La interventoría **debe** estar activa antes o simultáneamente con la obra. No se permite obra sin supervisión.
+*   **Efecto Legal:** La Orden de Inicio activa el plazo contractual y la obligación de disponibilidad del personal mínimo.
 
-**Hitos Iniciales:**
-1.  **Visita Conjunta (Obligatoria):** Inspección de terreno con levantamiento multimedia (videos y fotos referenciadas con PR y fecha).
-2.  **Reunión Técnica Inicial (RTI):** Debe ocurrir máximo a los **3 días hábiles** de la orden de inicio.
-3.  **Apertura de Bitácora:** Debe realizarse el mismo día de la RTI con páginas foliadas y bajo custodia de la Interventoría.
+**2. La Reunión Técnica Inicial (RTI):**
+*   **Plazo:** Máximo 3 días hábiles post-orden.
+*   **Documento Clave:** Acta FR-3. Es el "mapa de ruta" inicial donde se consignan los compromisos técnicos.
+*   **Participantes:** Director Territorial, Gestor, Interventor y Contratista.
 
-**Plazos de Compromisos:**
-Los compromisos pactados en el acta RTI tienen un plazo máximo de cumplimiento de **8 días hábiles**.`,
+**3. Visita Conjunta y Estado Cero:**
+*   Se realiza previa a la RTI. Es obligatoria para documentar el estado físico inicial.
+*   **Evidencia:** Registro fílmico y fotográfico georreferenciado (fundamental para reclamaciones futuras por condiciones preexistentes).`,
         evidence: [
             { source_id: "MEPI-MN1-IN-1", source_name: "Instructivo Inicio Ejecución", snippet: "La ejecución del contrato de obra no debe iniciarse con anterioridad a la orden de inicio del contrato de interventoría." },
-            { source_id: "MEPI-MN1-IN-1", source_name: "Instructivo Inicio Ejecución", snippet: "Máximo dentro de los tres (3) días hábiles siguientes se debe realizar una reunión técnica... Previa se debe efectuar una visita conjunta al sitio." },
-            { source_id: "MEPI-MN1-IN-1", source_name: "Instructivo Inicio Ejecución", snippet: "Los compromisos pactados deben tener un plazo máximo de cumplimiento de ocho (8) días hábiles." }
+            { source_id: "MEPI-MN1-IN-1", source_name: "Instructivo Inicio Ejecución", snippet: "Máximo dentro de los tres (3) días hábiles siguientes se debe realizar una reunión técnica... Previa se debe efectuar una visita conjunta al sitio." }
         ],
-        location: "MEPI-MN1-IN-1 Sección VI | Sección IX",
+        location: "MEPI-MN1-IN-1 Sección VI | Hitos de Inicio",
         tags: ["RTI", "Visita Conjunta", "Sincronización"]
     },
     {
         id: "kb-apu-detallado",
+        procedureId: "apu",
         keywords: ["apu", "no previsto", "items", "cotizaciones", "precios", "fijación", "fijacion"],
         responseContent: `
 #### Procedimiento de APU e Ítems no Previstos (MEPI-MN1-IN-10)
 
-La aprobación de nuevas actividades exige una justificación técnica, económica y jurídica rigurosa.
+La gestión de nuevas actividades es uno de los puntos de mayor riesgo jurídico. El manual MEPI establece un protocolo de blindaje para evitar sobrecostos y hallazgos administrativos.
 
-**Requisitos de la Carpeta:**
-*   **Solicitud formal:** Firmada por el Representante Legal con justificación de impacto en metas físicas.
-*   **Consulta de precios oficial:** Copia de consulta en web de INVIAS y análisis comparativo.
-*   **Formato APU (FR-1):** Diligenciado con memorias técnicas de cantidades y rendimientos.
+**Requisitos de Aprobación:**
+*   **Carpeta de Justificación:** Debe contener el análisis técnico (por qué es necesario), económico (por qué ese precio) y jurídico (está dentro del objeto).
+*   **Mínimo 3 Cotizaciones:** Deben ser reales, de la zona y de proveedores que puedan facturar legalmente.
+*   **Formato FR-4 (Acta de Fijación):** Es el documento habilitante. **PROHIBICIÓN EXPRESA:** El interventor no puede autorizar la ejecución física si el FR-4 no está firmado por todas las partes (incluyendo la DT).
 
-**Gestión de Cotizaciones:**
-*   **Mínimo 3 cotizaciones:** Obligatorias para insumos nuevos.
-*   **Procedencia:** Deben ser de la zona del proyecto o la más cercana.
-*   **Vigencia:** Deben estar vigentes y provenir de distribuidores autorizados.
-
-**Prohibición de Ejecución:**
-Es **OBLIGATORIO** contar con el **Acta de Fijación (FR-4)** firmada antes de iniciar cualquier labor. El Interventor tiene prohibido permitir ejecuciones sin este documento suscrito.`,
+**Metas Físicas:**
+Cualquier nuevo ítem debe analizarse frente al impacto en las metas contractuales originales. Si el ítem altera el valor total o las metas significativamente, requiere un **Otrosí** al contrato principal.`,
         evidence: [
-            { source_id: "MEPI-MN1-IN-10", source_name: "Instructivo APU", snippet: "El Interventor no debe permitir la ejecución de actividades correspondientes a ítems no previstos, sin la suscripción del formato MEPI-MN1-IN-10-FR-4." },
-            { source_id: "MEPI-MN1-IN-10", source_name: "Instructivo APU", snippet: "Tres (3) cotizaciones de los nuevos insumos... obtenidas en la zona del proyecto." }
+            { source_id: "MEPI-MN1-IN-10", source_name: "Instructivo APU", snippet: "El Interventor no debe permitir la ejecución de actividades correspondientes a ítems no previstos, sin la suscripción del formato MEPI-MN1-IN-10-FR-4." }
         ],
-        location: "MEPI-MN1-IN-10 Sección VII | Sección IX",
+        location: "MEPI-MN1-IN-10 Sección VII | Control de Precios",
         tags: ["APU", "FR-4", "No Previstos"]
     },
     {
+        id: "kb-informes-detallado",
+        procedureId: "informes",
+        keywords: ["informe", "informes", "semanal", "mensual", "jueves", "fr-3", "fr-1"],
+        responseContent: `
+#### Régimen de Informes: Semanales y Mensuales (MEPI-MN1-IN-15)
+
+El sistema de informes es el mecanismo de rendición de cuentas del Interventor ante el Instituto. No es solo un documento de avance, es el soporte del pago.
+
+**1. El Informe Semanal (Check-point Técnico):**
+*   **Corte:** Estrictamente todos los **JUEVES**.
+*   **Propósito:** Detectar desviaciones en el Programas de Obra de manera temprana.
+*   **Contenido:** Avance físico real vs programado, novedades de personal y maquinaria.
+
+**2. El Informe Mensual (Soporte Jurídico de Pago):**
+*   **Estructura:** Debe seguir estrictamente el orden del **Formato FR-1 (Lista de Chequeo)**.
+*   **Documentación Crítica:** Planillas de seguridad social (cruzadas con personal en sitio), bitácora del mes, actas de recibo parcial y registro fotográfico.
+*   **Consecuencia de Incumplimiento:** La no entrega o entrega incompleta bloquea el trámite de pago de la cuenta de interventoría.`,
+        evidence: [
+            { source_id: "MEPI-MN1-IN-15", source_name: "Instructivo Informes", snippet: "Su fecha de corte es siempre el día jueves." },
+            { source_id: "MEPI-MN1-IN-15", source_name: "Instructivo Informes", snippet: "Este formato [FR-1] debe ser obligatoriamente la página uno (1) del informe." }
+        ],
+        location: "MEPI-MN1-IN-15 Sección IV | Control Documental",
+        tags: ["Informes", "Corte Jueves", "Pago"]
+    },
+    {
+        id: "kb-suspension-detallada",
+        procedureId: "suspension",
+        keywords: ["suspensión", "reanudación", "secop", "garantías"],
+        responseContent: `
+#### Protocolo de Suspensión y Reanudación (MEPI-MN1-IN-11)
+
+La suspensión pausa las obligaciones de ejecución pero no libera al contratista de la custodia y mantenimiento del sitio.
+
+**Formalización en SECOP II:**
+*   La validez de la suspensión ante órganos de control depende de su registro en **SECOP II**. 
+*   **Dato Crítico:** La fecha de suspensión en plataforma prima sobre la del acta física.
+
+**Obligaciones Post-Reanudación:**
+*   Al reanudar, se cuenta con un plazo fatal de **3 días hábiles** para presentar la actualización de garantías.
+*   Se debe suscribir inmediatamente el Acta de Reanudación (FR-3 o FR-4) para reactivar el flujo de caja y los términos legales.`,
+        evidence: [
+            { source_id: "MEPI-MN1-IN-11", source_name: "Instructivo Suspensión", snippet: "Prima la fecha indicada en la plataforma [SECOP II] sobre la señalada en el formato." }
+        ],
+        location: "MEPI-MN1-IN-11 Sección IV | Gestión Digital",
+        tags: ["Suspensión", "SECOP II", "Garantías"]
+    },
+    {
         id: "kb-fcs",
+        procedureId: "recibo",
         keywords: ["fcs", "factor de compensacion social", "compensación social", "social factors"],
         responseContent: `
 #### Análisis Jurídico de los Factores de Compensación Social (FCS)
@@ -213,137 +252,222 @@ Este proceso requiere concepto de aprobación de la **Interventoría** y no obje
         tags: ["FCS", "Compensación", "Social"]
     },
     {
-        id: "kb-suspension-detallada",
-        keywords: ["suspensión", "reanudación", "secop", "garantías"],
+        id: "kb-bitacora",
+        keywords: ["bitacora", "libro", "folios", "registros"],
         responseContent: `
-#### Procedimiento de Suspensión y Reanudación (MEPI-MN1-IN-11)
+#### Gestión de la Bitácora de Obra
+La bitácora es el diario técnico del proyecto. Sus registros tienen valor probatorio en controversias contractuales.
 
-Según el manual MEPI, el proceso de suspensión es crítico para la seguridad jurídica del contrato.
-
-**Causales y Condiciones:**
-*   Procede por **fuerza mayor, caso fortuito o interés público**.
-*   **Simultaneidad:** La suspensión de interventoría implica obligatoriamente la de obra.
-
-**Formalidades en SECOP II:**
-*   **Primacía Digital:** La fecha que prima es la registrada en la plataforma **SECOP II**, no la del acta física.
-*   **Validez:** No se entiende suspendido sin la firma electrónica del funcionario competente.
-
-**Actualización de Garantías:**
-*   Es obligación del contratista actualizar las pólizas ampliando la vigencia por el tiempo de suspensión.
-*   **Plazo Fatal:** Máximo **3 días hábiles** tras la reanudación para presentar los certificados de modificación ante el Instituto, so pena de acciones legales.`,
-        evidence: [
-            { source_id: "MEPI-MN1-IN-11", source_name: "Instructivo Suspensión", snippet: "Prima la fecha indicada en la plataforma [SECOP II] sobre la señalada en el formato." },
-            { source_id: "MEPI-MN1-IN-11", source_name: "Instructivo Suspensión", snippet: "Dentro de los tres (3) días hábiles siguientes a la fecha de reanudación... obligan a presentar... certificados de modificación." }
-        ],
-        location: "MEPI-MN1-IN-11 Sección IV | Gestión SECOP II",
-        tags: ["Suspensión", "SECOP II", "Garantías"]
-    },
-    {
-        id: "kb-adicion",
-        keywords: ["adición", "adicion", "prórroga", "prorroga", "modificación", "modificacion", "30 días", "comité"],
-        responseContent: `
-#### Adición, Modificación y Prórroga (MEPI-MN1-IN-12 / IN-13)
-
-Cualquier alteración en tiempo, alcance o presupuesto debe estar plenamente justificada y legalizada.
-
-**La Regla de los 30 Días:**
-Toda solicitud formal, con soportes originales suscritos, debe presentarse a la Unidad Ejecutora con una **antelación mínima de 30 días calendario** al vencimiento del contrato.
-
-**Requisitos de Viabilidad:**
-*   **Concepto de Sostenibilidad:** Si afecta recursos ambientales, sociales o prediales, requiere concepto previo favorable de la Subdirección de Sostenibilidad.
-*   **Vigencias Futuras:** Obligatorias si la prórroga trasciende la vigencia fiscal en curso.
-*   **Comité de Contratación:** Máximo filtro de control. Su aprobación por sí sola no autoriza la ejecución; se requiere la suscripción de la **Minuta**.
-
-**Legalización:**
-Es requisito ineludible la **actualización de garantías** antes de la firma de la minuta. Tras la suscripción, se deben ajustar los Programas de Obra e Inversión.`,
-        evidence: [
-            { source_id: "MEPI-MN1-IN-12", source_name: "Instructivo Adición", snippet: "Presentar a la Unidad Ejecutora la solicitud formal... con una antelación mínima de treinta (30) días calendario." },
-            { source_id: "MEPI-MN1-IN-12", source_name: "Instructivo Adición", snippet: "Se requiere obligatoriamente de la suscripción y legalización de la minuta contractual." }
-        ],
-        location: "MEPI-MN1-IN-12 Sección IV | Sección VII",
-        tags: ["Adición", "Prórroga", "Comité de Contratación"]
-    },
-    {
-        id: "kb-informes",
-        keywords: ["informe semanal", "informe mensual", "jueves", "fr-1", "fr-3", "seguridad social", "pago"],
-        responseContent: `
-#### Informes Semanales y Mensuales (MEPI-MN1-IN-15)
-
-Sistema de seguimiento estandarizado para documentar el avance físico y financiero del proyecto.
-
-**Informe Semanal (FR-3):**
-*   **Corte de Tiempo:** La fecha de corte es estrictamente todos los **días JUEVES**.
-*   **Contenido:** Gráfico de avance, indicador I/C y registro fotográfico comparativo (antes, durante y después).
-
-**Informe Mensual (FR-1):**
-*   **Obligatoriedad:** El formato **FR-1 (Lista de Chequeo)** debe ser obligatoriamente la **PÁGINA UNO (1)** del informe.
-*   **Orden:** Los documentos deben seguir exactamente el orden de la lista de chequeo con folios coincidentes.
-
-**Seguridad Social y Pago:**
-*   **Control Laboral (FR-6/7):** El Interventor debe verificar el pago de aportes de ley y parafiscales, cruzándolos con la **nómina electrónica**.
-*   **Condición de Pago:** La radicación completa del Informe Mensual es requisito indispensable para autorizar el pago de la interventoría.`,
-        evidence: [
-            { source_id: "MEPI-MN1-IN-15", source_name: "Instructivo Informes", snippet: "Su fecha de corte es siempre el día jueves." },
-            { source_id: "MEPI-MN1-IN-15", source_name: "Instructivo Informes", snippet: "Este formato [FR-1] debe ser obligatoriamente la página uno (1) del informe." },
-            { source_id: "MEPI-MN1-IN-15", source_name: "Instructivo Informes", snippet: "La presentación completa del Informe Mensual... es un requisito indispensable para la autorización del pago." }
-        ],
-        location: "MEPI-MN1-IN-15 Sección IV | Control Laboral",
-        tags: ["Informes", "FR-1", "Corte Jueves", "Seguridad Social"]
-    },
-    {
-        id: "kb-recibo",
-        keywords: ["recibo", "definitivo", "visita previa", "pendiente", "planos record", "sancionatorio", "entrega", "liquidación"],
-        responseContent: `
-#### Recibo Definitivo y Liquidación (MEPI-MN1-IN-16 / IN-18)
-
-Cierre estructurado para salvaguardar recursos y garantizar la calidad de la infraestructura.
-
-**Fase 1: Visita Previa (La Regla de los 30 Días):**
-*   **Temporalidad:** Realizar visita conjunta **30 días calendario** antes del vencimiento (15 días si el contrato < 6 meses).
-*   **Objetivo:** Inspeccionar y documentar con el formato **FR-1** todas las correcciones obligatorias.
-*   **Verificación SIG:** Se deben validar los **planos récord (As-built)** y su compatibilidad con el sistema SIG del INVÍAS.
-
-**Fase 2: Entrega y Recibo Definitivo (FR-2):**
-*   **Hito Técnico:** Se materializa al vencimiento del plazo. Si hay pendientes no corregidos, se recibe la obra "en el estado en que se encuentre" SIN pagar lo defectuoso.
-*   **Consecuencias:** Detona el **Proceso Administrativo Sancionatorio** y descuentos económicos inmediatos.
-
-**Fase 3: Liquidación Contractual:**
-*   **Bilateral:** De mutuo acuerdo; balance jurídico y contable final. El contratista puede dejar **salvedades** expresas.
-*   **Unilateral:** Facultad excepcional del INVÍAS si el contratista no comparece o no hay acuerdo (dentro de los 2 meses siguientes).
-*   **Saldos:** Se cruza lo ejecutado contra lo pagado, resultando en saldos a favor o en contra según los formatos FR-3/4.`,
-        evidence: [
-            { source_id: "MEPI-MN1-IN-16", source_name: "Visita y Recibo Definitivo", snippet: "Antelación mínima de treinta (30) días calendario... la Interventoría debe realizar visita conjunta." },
-            { source_id: "MEPI-MN1-IN-16", source_name: "Visita y Recibo Definitivo", snippet: "Recibir las obras 'en el estado en que se encuentren'... lo que dará lugar a la aplicación de procedimientos sancionatorios." },
-            { source_id: "MEPI-MN1-IN-18", source_name: "Instructivo Liquidación", snippet: "El INVIAS tiene la facultad de liquidar unilateralmente dentro de los dos (2) meses siguientes." }
-        ],
-        location: "MEPI-MN1-IN-16 Sección IV | MEPI-MN1-IN-18 Sección V",
-        tags: ["Recibo Definitivo", "Liquidación", "FR-2", "Unilateral"]
-    },
-    {
-        id: "kb-firma-negacion",
-        keywords: ["firma", "negacion", "negación", "negativa", "niega", "rechazo", "acta", "suscribirla"],
-        responseContent: `
-#### Protocolo ante Negación de Firma de Actas
-
-Ante la negativa del Contratista para suscribir documentos oficiales, el Interventor debe seguir un protocolo de Blindaje Jurídico.
-
-**Acciones Inmediatas:**
-*   **Suscripción Obligatoria:** El Interventor debe suscribir el acta en todo caso, incluso sin la firma de la contraparte.
-*   **Constancia de Citación:** Es imperativo dejar registro escrito de la citación previa y la negativa expresa o tácita.
-
-**Efectos en Liquidación:**
-*   La falta de comparecencia faculta al INVÍAS para proceder con la **Liquidación Unilateral** mediante acto administrativo motivado.`,
-        evidence: [
-            { source_id: "MEPI-MN1-IN-16", source_name: "Visita y Recibo Definitivo", snippet: "En caso de que el contratista se niegue a firmar el acta, el Interventor debe proceder en todo caso a suscribirla." }
-        ],
-        location: "MEPI-MN1-IN-16 Sección V | Manual de Contratación Section 11.1",
-        tags: ["Firma", "Blindaje Jurídico", "Liquidación"]
+**Requisitos Técnicos:**
+*   **Foliación:** Debe estar foliada en todas sus páginas.
+*   **Custodia:** La custodia permanente recae sobre la **Interventoría**.
+*   **Contenido:** Hechos relevantes, clima, órdenes del interventor y respuesta del contratista. No se permiten espacios en blanco ni tachaduras.`,
+        location: "MEPI-MN1-IN-1 Sección IX | Control de Campo",
+        tags: ["Bitácora", "Control Técnico", "Evidencia"]
     }
 ];
 
-const app = {
+// Base del repositorio para visualización directa (Servidor de Contenido Crudo)
+const BASE_RAW_URL = "https://raw.githubusercontent.com/mmatarrita-stack/IA/main/pdfs";
+const REPO_FOLDER = "https://github.com/mmatarrita-stack/IA/tree/main/pdfs";
+
+// 5 secciones obligatorias del Manual Interventoría sincronizadas con GitHub
+const MANUAL_STRUCTURE = {
+    "tecnica": {
+        title: "Gestión Técnica",
+        docs: [
+            { id: "MEPI-13", name: "Solicitud Adición, Prórroga, Modificación", code: "MEPI-MN1-IN-13", url: `${BASE_RAW_URL}/MEPI-MN1-IN-13%20SOLICITUD%20ADICION,%20PRO,%20MOD%20INT.pdf` },
+            { id: "MEPI-14", name: "Acta de Comité y de Reunión", code: "MEPI-MN1-IN-14", url: `${BASE_RAW_URL}/MEPI-MN1-IN-14%20ACTA%20DE%20COMITE%20Y%20DE%20REUNION.pdf` },
+            { id: "MEPI-15", name: "Informe Semanal y Mensual", code: "MEPI-MN1-IN-15", url: `${BASE_RAW_URL}/MEPI-MN1-IN-15%20INFORME%20SEM%20Y%20MENSUAL%20INT.pdf` },
+            { id: "MEPI-16", name: "Visita Previa y Recibo Definitivo Obra", code: "MEPI-MN1-IN-16", url: `${BASE_RAW_URL}/MEPI-MN1-IN-16%20VISITA%20PREVIA%20Y%20RECIBO%20DEF%20OBRA.pdf` },
+            { id: "MEPI-17", name: "Recibo Definitivo Interventoría Informe Final", code: "MEPI-MN1-IN-17", url: `${BASE_RAW_URL}/MEPI-MN1-IN-17%20RECIBO%20DEF%20INT%20INFORME%20FINAL.pdf` },
+            { id: "MEPI-18", name: "Acta de Liquidación", code: "MEPI-MN1-IN-18", url: `${BASE_RAW_URL}/MEPI-MN1-IN-18%20ACTA%20DE%20LIQUIDACION.pdf` }
+        ]
+    },
+    "ambiental": {
+        title: "Gestión Ambiental",
+        docs: [
+            { id: "MASPS-01", name: "Seguimiento Gestión Ambiental", code: "MASPS-MN1-IN-1", url: `${BASE_RAW_URL}/MASPS-MN1-IN-1%20INSTRUCTIVO%20SEGUIMIENTO%20GESTION%20AMBIENTAL.pdf` },
+            { id: "MASPS-02", name: "Balance Ambiental Terminación Obra", code: "MASPS-MN1-IN-2", url: `${BASE_RAW_URL}/MASPS-MN1-IN-2%20INSTRUCTIVO%20BALANCE%20AMBIENTAL%20A%20LA%20TERMINACION%20CTO%20OBRA.pdf` }
+        ]
+    },
+    "social": {
+        title: "Gestión Social",
+        docs: [
+            { id: "MASPS-03", name: "Seguimiento y Balance Gestión Social", code: "MASPS-MN1-IN-3", url: `${BASE_RAW_URL}/MASPS-MN1-IN-3%20INSTRUCTIVO%20SEGUIMIENTO%20Y%20BALANCE%20GESTION%20SOCIAL%20CTO%20OBRA.pdf` },
+            { id: "MASPS-04", name: "Gestión Sociopredial", code: "MASPS-MN1-IN-4", url: `${BASE_RAW_URL}/MASPS-MN1-IN-4%20INSTRUCTIVO%20PARA%20LA%20GESTION%20SOCIOPREDIAL.pdf` }
+        ]
+    },
+    "predial": {
+        title: "Gestión Predial",
+        docs: [
+            { id: "MASPS-05", name: "Gestión y Adquisición Predial", code: "MASPS-MN1-IN-5", url: `${BASE_RAW_URL}/MASPS-MN1-IN-5%20INSTRUCTIVO%20GESTION%20Y%20ADQUISICION%20PREDIAL.pdf` }
+        ]
+    },
+    "sostenibilidad": {
+        title: "Sostenibilidad",
+        docs: [
+            { id: "MASPS-06", name: "Seguimiento y Evaluación Sostenibilidad", code: "MASPS-MN1-IN-6", url: `${BASE_RAW_URL}/MASPS-MN1-IN-6%20INSTRUCTIVO%20SEGUIMIENTO%20Y%20EVALUACION%20SOSTENIBILIDAD.pdf` }
+        ]
+    }
+};
+
+const RELATION_ENTITIES = {
+    // Inicio
+    "RP": { title: "Registro Presupuestal (RP)", description: "Certificación de disponibilidad de fondos para el contrato. Sin este, no hay sustento económico legal." },
+    "G": { title: "Aprobación de Garantías", description: "Revisión técnica de pólizas (cumplimiento, salarios, RCG). Se verifica vigencia y suficiencia." },
+    "OII": { title: "Orden de Inicio Interventoría", description: "Documento oficial que habilita el inicio de la supervisión técnica." },
+    "OIO": { title: "Orden de Inicio Obra", description: "Acto administrativo que autoriza el comienzo de actividades físicas." },
+    "VIS": { title: "Visita Conjunta Sitio", description: "Inspección de campo para verificar condiciones iniciales y georreferenciación obligatoria." },
+    "COM": { title: "Compromisos RTI", description: "Plan de acción derivado de la Reunión Técnica Inicial para los primeros días del proyecto." },
+    "RTI": {
+        title: "Reunión Técnica Inicial (RTI)",
+        description: "Hito administrativo obligatorio dentro de los 3 días posteriores a la orden de inicio. Define compromisos técnicos y administrativos.",
+        rich: `
+            <p>La RTI es la instancia de coordinación presencial donde se formalizan las reglas de juego del proyecto.</p>
+            <ul>
+                <li><strong>Plazo:</strong> 3 días hábiles post-orden.</li>
+                <li><strong>Acta:</strong> Formato FR-3 obligatoria.</li>
+                <li><strong>Participantes:</strong> Director Territorial, Gestor, Interventoría y Contratistas.</li>
+            </ul>
+        `
+    },
+    // APU
+    "SOL": { title: "Solicitud del Contratista", description: "Petición formal para la creación de un ítem no previsto con sustento técnico." },
+    "JUS": { title: "Justificación Técnica", description: "Análisis T/E/J sobre la necesidad de actividades adicionales fuera del objeto original." },
+    "COT": { title: "3 Cotizaciones Reales", description: "Soportes de precios de mercado de la zona firmados por proveedores locales." },
+    "AF": { title: "Acta de Fijación (FR-4)", description: "Documento legal donde se pactan los nuevos precios unitarios aprobados." },
+    // Suspensión (Nuevas)
+    "CAU": {
+        title: "Causal: Fuerza Mayor / Interés Público",
+        description: "Justificación jurídica y técnica que motiva la interrupción del plazo contractual.",
+        rich: `
+            <p>La causal debe estar plenamente sustentada con hechos externos, imprevisibles e irresistibles.</p>
+            <ul>
+                <li><strong>Fuerza Mayor:</strong> Desastres naturales, condiciones climáticas extremas.</li>
+                <li><strong>Interés Público:</strong> Decisiones administrativas por seguridad nacional o salud.</li>
+            </ul>
+        `
+    },
+    "ACT": {
+        title: "Acta de Suspensión (FR-1/2)",
+        description: "Documento suscrito por las partes que pausa el tiempo de ejecución de obra e interventoría.",
+        rich: "Requiere sustento técnico previo y aprobación del Gestor. El acta FR-1/2 es el documento oficial de pausa."
+    },
+    "SEC": {
+        title: "Firma y Publicación SECOP II",
+        description: "Registro obligatorio en plataforma que otorga validez legal a la suspensión ante el INVÍAS.",
+        rich: "Sin el registro en SECOP II, la suspensión no tiene validez jurídica frente a terceros ni entes de control."
+    },
+    "SUS": {
+        title: "Período Suspendido",
+        description: "Tiempo durante el cual no operan los plazos pero el contratista mantiene custodia del sitio.",
+        rich: "El contratista debe garantizar la seguridad y mantenimiento mínimo del sitio de obra durante este periodo."
+    },
+    "REA": {
+        title: "Acta de Reanudación (FR-3/4)",
+        description: "Documento de retorno a actividades normales indicando la nueva fecha de terminación.",
+        rich: "Se suscribe una vez superada la causal. Debe recalcular la fecha de terminación final del contrato."
+    },
+    "GUA": {
+        title: "Actualización de Garantías",
+        description: "Trámite obligatorio post-reanudación (máx 3 días) para ajustar la vigencia de las pólizas.",
+        rich: "Es responsabilidad del contratista presentar el anexo modificatorio de las pólizas ante el INVÍAS."
+    },
+    // Informes
+    "SEM": { title: "Informe Semanal", description: "Reporte de avance físico y financiero con corte a los días jueves." },
+    "COR": { title: "Corte Jueves", description: "Sincronización de datos técnicos y financieros para el reporte semanal obligatorio." },
+    "MEN": { title: "Informe Mensual", description: "Documento maestro y requisito de pago que consolida la gestión del mes." },
+    "LCH": { title: "Lista de Chequeo (FR-1)", description: "Control obligatorio que debe ser la página 1 de todo informe mensual." },
+    "PAG": { title: "Autorización de Pago", description: "Validación final de cumplimiento documental para el trámite de honorarios ante INVÍAS." },
+    // Recibo y Liquidación
+    "VP": { title: "Visita Previa (-30 días)", description: "Inspección antes del vencimiento para identificar pendientes y correcciones técnicas." },
+    "CT": { title: "Correcciones Técnicas", description: "Atención de observaciones del interventor previo al acta de recibo definitivo." },
+    "RD": {
+        title: "Recibo Definitivo (FR-1)",
+        description: "Acto formal donde el Instituto recibe la obra de conformidad total.",
+        rich: `
+            <p>Es el hito que cierra la fase de ejecución. Para su suscripción se requiere:</p>
+            <ul>
+                <li><strong>Cero Pendientes:</strong> Verificación de que todas las correcciones técnicas fueron atendidas.</li>
+                <li><strong>Planos Récord:</strong> Entrega total de la planimetría final de obra.</li>
+                <li><strong>Ensayos de Laboratorio:</strong> Certificación de calidad de todos los materiales.</li>
+            </ul>
+        `
+    },
+    "LIQ": {
+        title: "Liquidación Final",
+        description: "Cruce de cuentas definitivo y liberación de saldos remanentes contractuales.",
+        rich: "Fase jurídica donde se extinguen las obligaciones y se define el balance financiero final del proyecto."
+    },
+    "PAS": { title: "Proceso Sancionatorio", description: "Trámite legal ante el incumplimiento grave de obligaciones técnicas o plazos." },
+    "DES": { title: "Descuento Económico", description: "Penalización financiera aplicada por deficiencias técnicas no subsanadas en el tiempo previsto." },
+    // APU Adicionales
+    "APU": {
+        title: "Análisis APU FR-1",
+        description: "Desglose de costos unitarios (materiales, equipo, mano de obra) para el nuevo ítem.",
+        rich: "Documento técnico-financiero que sustenta un ítem no previsto. Debe incluir análisis de mercado y rendimiento certificado."
+    },
+    "MOD": { title: "Modificación Contractual", description: "Trámite legal (Adición o Otrosí) requerido si el ítem afecta el valor o metas del contrato." },
+    // Otros
+    "SECOP-II": {
+        title: "Plataforma SECOP II",
+        description: "Sistema oficial de contratación donde se registran hitos, suspensiones y firmas electrónicas de validez jurídica.",
+        rich: `
+            <p>En el modelo MEPI, el SECOP II es la fuente de verdad jurídica.</p>
+            <ul>
+                <li><strong>Firmas:</strong> Deben ser electrónicas para validez oficial.</li>
+                <li><strong>Fechas:</strong> La fecha de registro en SECOP II prima sobre el acta física.</li>
+            </ul>
+        `
+    },
+    "LEG": { title: "Legalización", description: "Trámite de registro presupuestal y perfeccionamiento del Otrosí." },
+    "RP": { title: "Registro Presupuestal (RP)", description: "Garantiza reserva de fondos." },
+    "G": { title: "Aprobación de Garantías", description: "Revisión técnica de pólizas." },
+    "OII": { title: "Orden Inicio Interventoría", description: "Activación del contrato de supervisión." },
+    "OIO": { title: "Orden Inicio Obra", description: "Activación del contrato de ejecución." },
+    "VIS": { title: "Visita Conjunta Sitio", description: "Validación de condiciones de campo." },
+    "RTI": { title: "Reunión Técnica Inicial (RTI)", description: "Definición de cronogramas y compromisos." },
+    "COM": { title: "Cumplimiento Compromisos", description: "Seguimiento a pactos de RTI." },
+    "SOL": { title: "Solicitud Contratista", description: "Petición formal de prórroga o adición." },
+    "EST": { title: "Estudio Interventoría", description: "Viabilidad técnica de la solicitud." },
+    "APR": { title: "Aprobación", description: "Vía libre del Comité de Contratación." },
+    "MIN": { title: "Suscripción Minuta", description: "Formalización legal del cambio contractual." }
+};
+
+window.app = {
     currentProcedure: null,
     lastAction: null,
+
+    // Helper para limpiar markdown de respuestas automáticas
+    formatRichText(text) {
+        if (!text) return "";
+        let clean = text
+            .replace(/^#### (.*$)/gim, '<strong style="color:var(--secondary); display:block; margin-top:10px;">$1</strong>')
+            .replace(/^### (.*$)/gim, '<strong style="color:var(--primary); display:block; margin-top:10px; font-size:1rem;">$1</strong>')
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/^\*(.*$)/gim, '<li style="margin-left:15px; margin-bottom:5px;">$1</li>')
+            .replace(/\n/g, '<br>');
+
+        // Autovinculación inteligente de documentos
+        clean = clean.replace(/((MEPI|MASPS)-MN1-IN-\d+)/g, (match) => {
+            let foundUrl = null;
+            Object.values(MANUAL_STRUCTURE).forEach(section => {
+                const doc = section.docs.find(d => d.code === match);
+                if (doc) foundUrl = doc.url;
+            });
+
+            if (foundUrl) {
+                return `<a href="${foundUrl}" target="_blank" class="doc-link-rich" title="Ver Documento Original">📄 ${match}</a>`;
+            }
+
+            // Fallback: Link directo al repositorio (Metodología preferida)
+            return `<a href="${REPO_FOLDER}" target="_blank" class="doc-link-rich" title="Explorar repositorio de documentos">🔍 ${match}</a>`;
+        });
+
+        return clean;
+    },
 
     init() {
         console.log("Smart Memory Initializing...");
@@ -361,9 +485,110 @@ const app = {
             }
         });
         this.renderProcedures();
+        this.renderManual();
         this.setupEventListeners();
-        this.renderGraph(PROCEDURE_INDEX['inicio'].graph);
+        this.initTrivia(); // Call initTrivia here
+        this.renderGraph(PROCEDURE_INDEX['inicio'].graph, 'inicio');
         this.updateDetailsPanel('inicio');
+    },
+
+    renderManual(filter = "") {
+        const container = document.getElementById('manual-sections-container');
+        if (!container) return;
+
+        container.innerHTML = '';
+        Object.entries(MANUAL_STRUCTURE).forEach(([key, section]) => {
+            const filteredDocs = section.docs.filter(doc =>
+                doc.name.toLowerCase().includes(filter.toLowerCase()) ||
+                doc.code.toLowerCase().includes(filter.toLowerCase())
+            );
+
+            if (filteredDocs.length === 0 && filter !== "") return;
+
+            const sectionDiv = document.createElement('div');
+            sectionDiv.className = 'manual-section' + (filter !== "" ? ' open' : '');
+
+            sectionDiv.innerHTML = `
+                <div class="manual-section-header" onclick="app.toggleManualSection(this)">
+                    <span>${section.title}</span>
+                    <span class="chevron">${filter !== "" ? '▲' : '▼'}</span>
+                </div>
+                <div class="manual-section-content">
+                    ${filteredDocs.map(doc => `
+                        <div class="manual-doc-item">
+                            <div class="doc-info">
+                                <div style="font-weight: 600; font-size: 0.75rem;">${doc.name}</div>
+                                <div style="font-size: 0.65rem; color: #64748b;">${doc.code}</div>
+                            </div>
+                            <a href="${doc.url}" target="_blank" class="pdf-link">PDF</a>
+                        </div>
+                    `).join('')}
+                    ${filteredDocs.length === 0 ? '<p style="padding:10px; font-size:0.7rem;">Sin coincidencias.</p>' : ''}
+                </div>
+            `;
+            container.appendChild(sectionDiv);
+        });
+    },
+
+    toggleManualSection(header) {
+        const section = header.parentElement;
+        const isOpen = section.classList.contains('open');
+
+        // Cierra los demás
+        document.querySelectorAll('.manual-section').forEach(s => s.classList.remove('open'));
+
+        if (!isOpen) {
+            section.classList.add('open');
+            header.querySelector('.chevron').innerText = '▲';
+        } else {
+            header.querySelector('.chevron').innerText = '▼';
+        }
+    },
+
+    simulatePdfOpen(docName) {
+        // Mostrar tab Detalles con info del doc sin ensuciar el chat central
+        this.showEntityDetail("Manual", `Vista previa de documento: ${docName}`, `
+            <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px dashed var(--accent); margin-bottom: 20px;">
+                <p><strong>Documento:</strong> ${docName}</p>
+                <p style="font-size: 0.85rem; color: #64748b;">El visor de NotebookLM cargaría este archivo con las citas y referencias técnicas resaltadas automáticamente.</p>
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="app.exportManualCSV('all')">📥 Descargar Copia para Revisión</button>
+        `);
+    },
+
+    searchManual(query) {
+        if (!query) return;
+
+        // Buscar en la estructura del manual
+        const results = [];
+        Object.values(MANUAL_STRUCTURE).forEach(section => {
+            section.docs.forEach(doc => {
+                if (doc.name.toLowerCase().includes(query.toLowerCase()) ||
+                    doc.code.toLowerCase().includes(query.toLowerCase())) {
+                    results.push(doc);
+                }
+            });
+        });
+
+        if (results.length > 0) {
+            let html = `<p style="margin-bottom: 15px;">Se encontraron <strong>${results.length}</strong> documentos relacionados:</p>`;
+            results.forEach(doc => {
+                html += `
+                    <div style="background: white; border: 1px solid var(--border); padding: 12px; border-radius: 6px; margin-bottom: 10px;">
+                        <div style="font-weight: 600; color: var(--primary);">${doc.name}</div>
+                        <div style="font-size: 0.75rem; color: #475569; margin-bottom: 8px;">Código: ${doc.code}</div>
+                        <a href="${doc.url}" target="_blank" class="doc-link-rich" style="text-decoration: none; padding: 5px 12px; border-radius: 6px;">📄 Abrir Documento</a>
+                    </div>
+                `;
+            });
+
+            this.showEntityDetail("Búsqueda en Manual", `Resultados para: "${query}"`, html);
+        } else {
+            this.showEntityDetail("Sin resultados", `Búsqueda: "${query}"`, `
+                <p>No se encontraron documentos específicos en el manual con ese término.</p>
+                <p style="font-size: 0.85rem; color: #64748b; margin-top: 10px;">Intenta con códigos FR (ej: FR-1) o palabras clave técnicas.</p>
+            `);
+        }
     },
 
     renderProcedures() {
@@ -372,14 +597,18 @@ const app = {
         Object.values(PROCEDURE_INDEX).forEach(proc => {
             const li = document.createElement('li');
             li.className = 'procedure-item';
+            li.setAttribute('data-id', proc.id);
             li.innerHTML = `
                 <div class="title">${proc.title}</div>
                 <div class="procedure-actions">
                     <span class="action-icon" title="Checklist" onclick="event.stopPropagation(); app.showChecklist('${proc.id}')">📋</span>
-                    <span class="action-icon" title="Grafo" onclick="event.stopPropagation(); app.selectProcedure('${proc.id}')">🕸️</span>
+                    <span class="action-icon" title="Grafo" onclick="event.stopPropagation(); app.selectProcedure('${proc.id}'); app.switchSideTab('graph')">🕸️</span>
                 </div>
             `;
-            li.onclick = () => this.selectProcedure(proc.id);
+            li.onclick = () => {
+                this.selectProcedure(proc.id);
+                this.switchSideTab('graph');
+            };
             list.appendChild(li);
         });
     },
@@ -392,10 +621,9 @@ const app = {
                 this.handleUserInput();
             }
         };
-        document.getElementById('btn-export').onclick = () => this.exportHistory();
         document.getElementById('global-search').onkeypress = (e) => {
             if (e.key === 'Enter') {
-                this.simulateBotResponse(e.target.value);
+                this.searchManual(e.target.value);
                 e.target.value = '';
             }
         };
@@ -416,43 +644,165 @@ const app = {
         document.getElementById('current-procedure-subtitle').innerText = "Manual: " + proc.source_id;
 
         document.querySelectorAll('.procedure-item').forEach(el => el.classList.remove('active'));
-        const activeItems = [...document.querySelectorAll('.procedure-item')];
-        const activeItem = activeItems.find(el => el.querySelector('.title').innerText === proc.title);
-        if (activeItem) activeItem.classList.add('active');
+        const activeItem = document.querySelector(`.procedure-item[data-id="${id}"]`);
+        if (activeItem) {
+            activeItem.classList.add('active');
+            activeItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
 
-        this.renderGraph(proc.graph);
+        this.renderGraph(proc.graph, id);
         this.updateDetailsPanel(id);
+        // Switch will be handled by the caller if needed
     },
 
     updateDetailsPanel(id) {
         const proc = PROCEDURE_INDEX[id];
         const container = document.getElementById('entity-details');
+        if (!container) return;
+
+        container.innerHTML = '';
+
+        let stepsHtml = proc.checklist.map(step => `
+            <div class="step-item" onclick="app.showEntityDetail('${step.step.replace(/'/g, "\\'")}', '${step.responsible.replace(/'/g, "\\'")}', '${step.citation.replace(/'/g, "\\'")}')">
+                <div class="step-check"></div>
+                <div class="step-info">
+                    <div class="step-text">${step.step}</div>
+                    <div class="step-meta">Responsable: ${step.responsible}</div>
+                </div>
+            </div>
+        `).join('');
 
         let html = `
             <div class="detail-card animate-fade-in" style="border-top: 4px solid var(--secondary)">
-                <h4>${proc.title}</h4>
-                <p style="margin-bottom: 15px;">${proc.summary}</p>
-                <div class="detail-links">
-                    <button class="btn btn-secondary" style="width: 100%; margin-bottom: 8px;" onclick="app.showChecklist('${proc.id}')">📋 Checklist Detallado</button>
-                    <button class="btn btn-primary" style="width: 100%;" onclick="app.exportToCSV()">📥 Guía Técnica (CSV)</button>
+                <h4 style="color: var(--secondary); margin-bottom: 12px; font-size: 1.1rem; font-weight: 700;">${proc.title}</h4>
+                <div style="font-size: 0.92rem; color: #475569; margin-bottom: 25px; line-height: 1.6;">
+                    ${proc.summary}
                 </div>
-            </div>
-            <div class="detail-card animate-fade-in" style="margin-top: 15px;">
-                <h4 style="color: var(--text-muted); font-size: 0.75rem;">REFERENCIAS TÉCNICAS</h4>
-                <div style="font-size: 0.85rem; line-height: 1.8;">
-                    <div><strong>Manual:</strong> <span class="form-link-tag">${proc.source_id}</span></div>
-                    <div><strong>Fuente:</strong> Protocolo Integral</div>
+                
+                <h5 style="font-size: 0.75rem; color: #475569; margin: 25px 0 15px 0; text-transform: uppercase; font-weight: 700; letter-spacing: 0.8px;">PASOS DEL PROCEDIMIENTO</h5>
+                <div class="steps-progress">
+                    ${stepsHtml}
+                </div>
+
+                <div class="detail-links" style="margin-top: 30px; border-top: 1px solid var(--border); padding-top: 20px;">
+                    <button class="btn btn-secondary" style="width: 100%; margin-bottom: 10px;" onclick="app.showChecklist('${proc.id}')">📋 Ver Documentación Completa</button>
+                    <button class="btn btn-primary" style="width: 100%;" onclick="app.exportToCSV()">📥 Exportar Reporte Técnico</button>
                 </div>
             </div>
         `;
         container.innerHTML = html;
     },
 
-    renderGraph(definition) {
-        const container = document.getElementById('mermaid-graph');
-        container.innerHTML = definition;
-        container.removeAttribute('data-processed');
-        mermaid.contentLoaded();
+    renderGraph(definition, procId) {
+        const listContainer = document.getElementById('relations-list-container');
+        if (!listContainer) return;
+        listContainer.innerHTML = '';
+
+        const nodeMap = new Map();
+        const defRegex = /([a-zA-Z0-9-]+)\s*\["?(.*?)"?\]/g;
+        let match;
+        while ((match = defRegex.exec(definition)) !== null) {
+            nodeMap.set(match[1], match[2]);
+        }
+
+        // 2. Encontrar conexiones ID1 --> ID2 o ID para asegurar que todos existan
+        const flowRegex = /([a-zA-Z0-9-]+)\s*(-->|--)\s*([a-zA-Z0-9-]+)/g;
+        const uniqueIds = new Set();
+        while ((match = flowRegex.exec(definition)) !== null) {
+            uniqueIds.add(match[1]);
+            uniqueIds.add(match[3]);
+        }
+
+        // Si no hay conexiones pero hay definiciones, usar definiciones
+        if (uniqueIds.size === 0) {
+            nodeMap.forEach((val, key) => uniqueIds.add(key));
+        }
+
+        if (uniqueIds.size === 0) {
+            listContainer.innerHTML = `<p class="empty-state">Sin relaciones gráficas.</p>`;
+            return;
+        }
+
+        const flowContainer = document.createElement('div');
+        flowContainer.className = 'flow-container';
+
+        Array.from(uniqueIds).forEach((id, index) => {
+            const label = nodeMap.get(id) || id;
+
+            const stepWrapper = document.createElement('div');
+            stepWrapper.className = 'flow-step';
+
+            const btn = document.createElement('button');
+            btn.className = 'relation-btn animate-fade-in';
+            btn.innerHTML = `<span>${index + 1}. ${label}</span>`;
+            btn.onclick = (e) => {
+                if (e) e.preventDefault();
+                document.querySelectorAll('.relation-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Navegación directa: Si el ID es un procedimiento, ir a ese procedimiento.
+                // Si es un paso interno, ir directamente a la vista de "Roadmap" (Detalles) del procedimiento actual.
+                if (PROCEDURE_INDEX[id]) {
+                    app.selectProcedure(id);
+                } else {
+                    const targetId = procId || (app.currentProcedure ? app.currentProcedure.id : 'inicio');
+                    app.updateDetailsPanel(targetId);
+                }
+                app.switchSideTab('info');
+            };
+
+            stepWrapper.appendChild(btn);
+            if (index < uniqueIds.size - 1) {
+                const arrow = document.createElement('div');
+                arrow.className = 'flow-arrow';
+                stepWrapper.appendChild(arrow);
+            }
+            flowContainer.appendChild(stepWrapper);
+        });
+
+        listContainer.appendChild(flowContainer);
+
+        // Mermaid hidden sync
+        const mermaidContainer = document.getElementById('mermaid-graph');
+        if (mermaidContainer) {
+            mermaidContainer.innerHTML = definition;
+            mermaidContainer.removeAttribute('data-processed');
+        }
+    },
+
+    exportManualCSV(sectionKey) {
+        let rows = [["Seccion", "Documento", "Tipo", "URL", "Codigo", "Version", "Fecha"]];
+
+        const sectionsToExport = sectionKey === 'all'
+            ? Object.entries(MANUAL_STRUCTURE)
+            : [[sectionKey, MANUAL_STRUCTURE[sectionKey]]];
+
+        sectionsToExport.forEach(([key, section]) => {
+            section.docs.forEach(doc => {
+                rows.push([
+                    section.title,
+                    doc.name,
+                    "PDF",
+                    doc.url,
+                    doc.code,
+                    doc.version,
+                    doc.date
+                ]);
+            });
+        });
+
+        const csvContent = "data:text/csv;charset=utf-8,"
+            + rows.map(e => e.join(",")).join("\n");
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `Manual_Interventoria_${sectionKey}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        this.addMessage('bot', `Se ha generado la exportación CSV de la sección **${sectionKey === 'all' ? 'Completa' : MANUAL_STRUCTURE[sectionKey].title}**.`);
     },
 
     showChecklist(id) {
@@ -467,9 +817,9 @@ const app = {
             tr.innerHTML = `
                 <td><input type="checkbox" ${saved ? 'checked' : ''} onchange="app.saveCheck('${id}', ${index}, this.checked)"></td>
                 <td>${item.step}</td>
-                <td>${item.responsible}</td>
-                <td>${item.evidence}</td>
-                <td class="citation-small">${item.citation}</td>
+                <td><span class="badge-resp">${item.responsible}</span></td>
+                <td><small>${item.evidence}</small></td>
+                <td class="citation-small">${this.formatRichText(item.citation)}</td>
             `;
             tbody.appendChild(tr);
         });
@@ -491,8 +841,12 @@ const app = {
         const text = input.value.trim();
         if (!text) return;
 
+        // Limpiar marcador anterior de scroll
+        const oldMarker = document.getElementById('last-question');
+        if (oldMarker) oldMarker.id = '';
+
         const lowerText = text.toLowerCase();
-        this.addMessage('user', text);
+        this.addMessage('user', text, { id: 'last-question' });
         input.value = '';
 
         if (lowerText === 'si' || lowerText === 'sí' || lowerText === 'claro' || lowerText === 'por favor') {
@@ -543,7 +897,7 @@ const app = {
         formattedText = formattedText.replace(/(FR-\d+)/g, '<span class="form-link-tag" title="Click para copiar y ver manual" onclick="app.searchForm(\'$1\')">$1</span>');
 
         // Incluir vínculos directos a manuales/documentos si se detectan IDs de fuente
-        formattedText = formattedText.replace(/(MEPI-MN1-IN-\d+)/g, '<a href="#" class="detail-link" onclick="app.showDocsByManual(\'$1\')">📄 $1</a>');
+        formattedText = this.formatRichText(formattedText);
 
         // Auto-bolding para términos críticos (como 'Suspensión')
         if (type === 'bot') {
@@ -588,8 +942,17 @@ const app = {
         }
 
         div.innerHTML = html;
+        if (options.id) div.id = options.id;
         container.appendChild(div);
-        container.scrollTop = container.scrollHeight;
+
+        // Si es mensaje de usuario o bot, queremos que se vea la pregunta.
+        // Scroll al marcador de la última pregunta.
+        const marker = document.getElementById('last-question');
+        if (marker) {
+            marker.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+            container.scrollTop = container.scrollHeight;
+        }
     },
 
     /**
@@ -686,14 +1049,24 @@ const app = {
 
                 if (best.type === 'proc') {
                     this.selectProcedure(best.data.id);
-                    this.addMessage('bot', `He detectado que tu consulta está relacionada con el procedimiento de **${best.data.title}**. \n\n${best.data.summary}`, {
-                        location: `Manual MEPI | ${best.data.source_id}`,
-                        tags: [best.data.id, "Contexto-Manual"]
-                    });
+                    // Búsqueda de profundidad en KB para este procedimiento
+                    const kbEntry = KNOWLEDGE_BASE.find(kb => kb.procedureId === best.data.id);
+
+                    if (kbEntry) {
+                        this.addMessage('bot', kbEntry.responseContent, {
+                            evidence: kbEntry.evidence,
+                            location: kbEntry.location,
+                            tags: kbEntry.tags
+                        });
+                    } else {
+                        this.addMessage('bot', `He detectado que tu consulta está relacionada con el procedimiento de **${best.data.title}**. \n\n${best.data.summary}`, {
+                            location: `Manual MEPI | ${best.data.source_id}`,
+                            tags: [best.data.id, "Contexto-Manual"]
+                        });
+                    }
                 } else if (best.type === 'kb') {
                     const kb = best.data;
-                    const procIdMapping = { "kb-inicio": "inicio", "kb-apu": "apu", "kb-suspension": "suspension", "kb-recibo": "recibo", "kb-firma-negacion": "recibo" };
-                    if (procIdMapping[kb.id]) this.selectProcedure(procIdMapping[kb.id]);
+                    if (kb.procedureId) this.selectProcedure(kb.procedureId);
 
                     this.addMessage('bot', kb.responseContent, {
                         evidence: kb.evidence,
@@ -702,11 +1075,25 @@ const app = {
                     });
                 }
             } else {
-                // FALLBACK ESTRATÉGICO: En lugar de "No encontrado", ofrece navegación asistida
-                this.addMessage('bot', "No localicé una cita literal exacta, pero analizando los protocolos MEPI, te sugiero revisar las secciones de **Recibo Definitivo** o **Suspensión**, que contienen las reglas generales de firma y cumplimiento. \n\n¿Deseas que abra el checklist detallado de alguna de estas fases?", {
-                    location: "Consulte el Índice General de Procedimientos MEPI",
-                    tags: ["Asistente-Navegación"]
-                });
+                // FALLBACK ESTRATÉGICO: Búsqueda en entidades de relación
+                let entityMatch = null;
+                for (const [key, entity] of Object.entries(RELATION_ENTITIES)) {
+                    if (q.includes(key.toLowerCase()) || q.includes(entity.title.toLowerCase())) {
+                        entityMatch = entity;
+                        break;
+                    }
+                }
+
+                if (entityMatch) {
+                    this.addMessage('bot', `#### Detalle Técnico: ${entityMatch.title}\n\n${entityMatch.description}\n\n${entityMatch.rich || ''}`, {
+                        tags: ["Diccionario-Técnico"]
+                    });
+                } else {
+                    this.addMessage('bot', "No localicé una cita literal exacta, pero analizando los protocolos MEPI, te sugiero revisar las secciones de **Recibo Definitivo** o **Suspensión**, que contienen las reglas generales de firma y cumplimiento. \n\n¿Deseas que abra el checklist detallado de alguna de estas fases?", {
+                        location: "Consulte el Índice General de Procedimientos MEPI",
+                        tags: ["Asistente-Navegación"]
+                    });
+                }
             }
 
         } catch (error) {
@@ -766,11 +1153,22 @@ const app = {
         if (docs.size === 0) {
             docsHtml += `<p>No se encontraron formularios FR asociados directamente a este paso.</p>`;
         } else {
+            // Buscar si el manual de este procedimiento existe en la estructura oficial
+            let manualUrl = null;
+            Object.values(MANUAL_STRUCTURE).forEach(section => {
+                const found = section.docs.find(d => d.code === proc.source_id);
+                if (found) manualUrl = found.url;
+            });
+
             docs.forEach(doc => {
                 docsHtml += `
                     <div class="doc-list-item" style="border-bottom: 1px solid var(--border); padding: 12px; display: flex; justify-content: space-between; align-items: center;">
                         <span><strong style="color: var(--secondary)">${doc}</strong> - Formato Requerido</span>
-                        <button class="btn btn-secondary btn-small" onclick="app.searchForm('${doc}')">Ver Detalles</button>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-secondary btn-small" onclick="app.searchForm('${doc}')">Ver Análisis</button>
+                            ${manualUrl ? `<a href="${manualUrl}" target="_blank" class="btn btn-primary btn-small" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">📄 PDF</a>` :
+                        `<a href="javascript:void(0)" onclick="app.searchForm('${doc}')" class="btn btn-primary btn-small" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">🔍 Info</a>`}
+                        </div>
                     </div>`;
             });
         }
@@ -803,14 +1201,69 @@ const app = {
         this.simulateBotResponse(manualId);
     },
 
-    switchSideTab(tab, event) {
-        document.querySelectorAll('.tab-link').forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    showEntityDetail(id, title, customDesc = "") {
+        console.log("Mostrando detalle:", id, title);
+        const container = document.getElementById('entity-details');
+        if (!container) return;
 
-        if (event) {
-            event.target.classList.add('active');
-            const targetContent = document.getElementById(`side-tab-${tab}`);
-            if (targetContent) targetContent.classList.add('active');
+        let entity = RELATION_ENTITIES[id] || RELATION_ENTITIES[title];
+
+        if (!entity) {
+            const kbMatch = KNOWLEDGE_BASE.find(kb =>
+                kb.keywords.some(k => title.toLowerCase().includes(k.toLowerCase()))
+            );
+            if (kbMatch) {
+                entity = {
+                    title: title,
+                    description: kbMatch.responseContent,
+                    rich: kbMatch.responseContent
+                };
+            }
+        }
+
+        const content = entity ? (entity.rich || entity.description) : customDesc;
+        const formattedContent = this.formatRichText(content);
+
+        let html = `
+            <div class="detail-card animate-fade-in" style="border-top: 4px solid var(--secondary)">
+                <h4 style="color: var(--secondary); margin-bottom: 12px; font-size: 1.1rem; font-weight: 700;">${title}</h4>
+                <div style="font-size: 0.92rem; color: #475569; margin-bottom: 25px; line-height: 1.6;">
+                    ${formattedContent || 'Sin descripción detallada disponible en el manual.'}
+                </div>
+                
+                <div class="detail-links" style="margin-top: 30px; border-top: 1px solid var(--border); padding-top: 20px;">
+                    <button class="btn btn-secondary" style="width: 100%;" onclick="app.updateDetailsPanel('${this.currentProcedure ? this.currentProcedure.id : 'inicio'}')">⬅️ Volver al Procedimiento</button>
+                </div>
+            </div>
+        `;
+        container.innerHTML = html;
+        this.switchSideTab('info');
+    },
+
+    switchSideTab(tabId, event) {
+        if (event) event.preventDefault();
+        console.log("Cambiando a pestaña:", tabId);
+
+        // Tab links
+        document.querySelectorAll('.tab-link').forEach(btn => {
+            btn.classList.remove('active');
+            const handler = btn.getAttribute('onclick') || "";
+            if (handler.includes(`'${tabId}'`)) {
+                btn.classList.add('active');
+            }
+        });
+
+        // Tab contents
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+
+        const activeTab = document.getElementById(`side-tab-${tabId}`);
+        if (activeTab) {
+            activeTab.classList.add('active');
+            // Scroll to top
+            const scrollArea = activeTab.closest('.tab-content-scroll');
+            if (scrollArea) scrollArea.scrollTop = 0;
         }
     },
 
@@ -864,18 +1317,179 @@ const app = {
         this.handleUserInput();
     },
 
-    exportHistory() {
-        const messages = document.getElementById('chat-messages').innerText;
-        const blob = new Blob([messages], { type: 'text/plain' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `historial_smart_memory.txt`;
-        a.click();
-    },
 
     downloadReference(index) {
         alert(`Iniciando descarga del documento PDF referenciado en la cita [${index + 1}] del manual. Enlace simulado a repositorio INVÍAS.`);
+    },
+
+    // --- Módulo de Trivia (Basado en Instructivos Prueba) ---
+    trivia: {
+        currentIdx: 0,
+        score: 0,
+        timer: null,
+        timeLeft: 5,
+        history: [20], // Base line for graph
+        questions: [
+            {
+                q: "¿Cuál es el plazo máximo para realizar la Reunión Técnica Inicial una vez impartida la orden de inicio de los contratos de obra e interventoría?",
+                o: ["5 días hábiles", "3 días hábiles", "10 días calendario", "8 días hábiles"],
+                a: 1,
+                e: "Según MEPI-MN1-IN-1, la RTI debe realizarse máximo dentro de los tres (3) días hábiles siguientes a la orden de inicio."
+            },
+            {
+                q: "¿A qué hace referencia el término 'Proyectos de mínimo impacto' según la gestión ambiental (MASPS-MN1-IN-1)?",
+                o: ["Sin inversión presupuestal", "Baja alteración al ambiente natural", "Licencia ANLA exclusiva", "Sin supervisión de interventoría"],
+                a: 1,
+                e: "Son proyectos en zonas intervenidas con muy baja alteración a los recursos naturales o al paisaje."
+            },
+            {
+                q: "¿Cuál es el objetivo principal de las Actas de Vecindad (MASPS-MN1-IN-3)?",
+                o: ["Estado físico previo para prevenir reclamaciones", "Expropiar predios en zona reserva", "Avaluar para compensaciones", "Registrar mano de obra local"],
+                a: 0,
+                e: "Establecer el estado previo de infraestructura aledaña para identificar averías y prevenir falsas reclamaciones."
+            },
+            {
+                q: "Según MEPI-MN1-IN-2, ¿qué % máximo del anticipo se puede usar para compra de maquinaria sin resolución adicional?",
+                o: ["10%", "15%", "20%", "30%"],
+                a: 1,
+                e: "Sólo se permite hasta el 15%; porcentajes mayores requieren resolución del Director General."
+            },
+            {
+                q: "¿Plazo para liquidación unilateral si no hay mutuo acuerdo (MEPI-MN1-IN-18)?",
+                o: ["15 días hábiles", "6 meses", "1 año siguiente", "2 meses siguientes al plazo de mutuo acuerdo"],
+                a: 3,
+                e: "INVIAS puede liquidar unilateralmente dentro de los 2 meses siguientes al vencimiento del plazo de mutuo acuerdo."
+            }
+        ]
+    },
+
+    initTrivia() {
+        this.trivia.currentIdx = Math.floor(Math.random() * this.trivia.questions.length);
+        this.drawTriviaGraph();
+    },
+
+    toggleTrivia() {
+        const box = document.getElementById('trivia-container');
+        const content = document.getElementById('trivia-content');
+        const icon = document.getElementById('trivia-toggle-icon');
+
+        const isMinimized = box.classList.contains('minimized');
+        if (isMinimized) {
+            box.classList.remove('minimized');
+            content.style.display = 'block';
+            icon.innerText = '-';
+            this.renderTriviaQuestion();
+        } else {
+            box.classList.add('minimized');
+            content.style.display = 'none';
+            icon.innerText = '+';
+            clearInterval(this.trivia.timer);
+        }
+    },
+
+    startTriviaTimer() {
+        clearInterval(this.trivia.timer);
+        this.trivia.timeLeft = 5;
+        this.updateTriviaTimerUI();
+
+        this.trivia.timer = setInterval(() => {
+            this.trivia.timeLeft--;
+            this.updateTriviaTimerUI();
+
+            if (this.trivia.timeLeft <= 0) {
+                this.checkAnswer(-1); // Tiempo agotado
+            }
+        }, 1000);
+    },
+
+    updateTriviaTimerUI() {
+        const span = document.getElementById('trivia-timer');
+        const fill = document.getElementById('trivia-timer-fill');
+        if (span) span.innerText = this.trivia.timeLeft;
+        if (fill) fill.style.width = `${(this.trivia.timeLeft / 5) * 100}%`;
+    },
+
+    renderTriviaQuestion() {
+        const qData = this.trivia.questions[this.trivia.currentIdx];
+        document.getElementById('trivia-question').innerText = qData.q;
+        const optionsContainer = document.getElementById('trivia-options');
+        optionsContainer.innerHTML = '';
+        document.getElementById('trivia-feedback').innerText = '';
+
+        qData.o.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'trivia-button';
+            btn.innerText = opt;
+            btn.onclick = () => this.checkAnswer(idx);
+            optionsContainer.appendChild(btn);
+        });
+
+        this.startTriviaTimer();
+    },
+
+    checkAnswer(idx) {
+        clearInterval(this.trivia.timer);
+        const qData = this.trivia.questions[this.trivia.currentIdx];
+        const buttons = document.querySelectorAll('.trivia-button');
+        const feedback = document.getElementById('trivia-feedback');
+
+        buttons.forEach(btn => btn.disabled = true);
+
+        let delta = -5;
+        if (idx === qData.a) {
+            delta = 5;
+            feedback.innerHTML = `<span style="color: #166534">✅ ¡Correcto!</span><br><small>${qData.e}</small>`;
+            if (idx !== -1) buttons[idx].classList.add('correct');
+        } else {
+            feedback.innerHTML = `<span style="color: #991b1b">❌ Incorrecto.</span><br><small>${qData.e}</small>`;
+            if (idx !== -1) buttons[idx].classList.add('wrong');
+            if (idx === -1) feedback.innerHTML = `<span style="color: #991b1b">⏰ ¡Tiempo agotado!</span><br><small>${qData.e}</small>`;
+            buttons[qData.a].classList.add('correct');
+        }
+
+        this.trivia.score += delta;
+        document.getElementById('trivia-score').innerText = this.trivia.score;
+        this.trivia.history.push(Math.max(0, Math.min(40, this.trivia.history[this.trivia.history.length - 1] + (delta))));
+        this.drawTriviaGraph();
+
+        setTimeout(() => {
+            this.trivia.currentIdx = Math.floor(Math.random() * this.trivia.questions.length);
+            this.renderTriviaQuestion();
+        }, 3000);
+    },
+
+    drawTriviaGraph() {
+        const canvas = document.getElementById('trivia-graph');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+
+        // Draw Baseline
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.beginPath();
+        ctx.moveTo(0, h / 2);
+        ctx.lineTo(w, h / 2);
+        ctx.stroke();
+
+        ctx.lineWidth = 2;
+        const history = this.trivia.history;
+        const step = w / Math.max(10, history.length - 1);
+
+        for (let i = 1; i < history.length; i++) {
+            ctx.beginPath();
+            ctx.moveTo((i - 1) * step, h - history[i - 1]);
+            ctx.lineTo(i * step, h - history[i]);
+
+            // Color based on increase or decrease
+            if (history[i] > history[i - 1]) {
+                ctx.strokeStyle = '#3b82f6'; // Blue for success
+            } else {
+                ctx.strokeStyle = '#ef4444'; // Red for failure
+            }
+            ctx.stroke();
+        }
     }
 };
 
