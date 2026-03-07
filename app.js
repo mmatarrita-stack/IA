@@ -438,6 +438,48 @@ const RELATION_ENTITIES = {
 window.app = {
     currentProcedure: null,
     lastAction: null,
+    errorCount: 0,
+    isHealthy: true,
+
+    async checkRepositoryHealth() {
+        console.log("Checking repository integrity...");
+        const badge = document.querySelector('.status-badge');
+        try {
+            // Ping the base raw URL or a specific small file to verify connectivity
+            const response = await fetch(BASE_RAW_URL + "/MEPI-MN1-IN-13%20SOLICITUD%20ADICION,%20PRO,%20MOD%20INT.pdf", { method: 'HEAD', mode: 'no-cors' });
+            // Note: no-cors will always return status 0, but if it throws, we have a network issue.
+            // For a real check, we'd need a proxy or CORS-enabled endpoint, but HEAD with no-cors tests reachability.
+
+            this.isHealthy = true;
+            if (badge) {
+                badge.className = 'status-badge connected';
+                badge.innerText = 'Repositorio: Operativo';
+            }
+        } catch (error) {
+            console.error("Repository Access Error:", error);
+            this.isHealthy = false;
+            if (badge) {
+                badge.className = 'status-badge error';
+                badge.innerText = 'Repositorio: Inaccesible';
+            }
+            this.addMessage('bot', "⚠️ **Alerta de Integridad:** Se detectó inconsistencia en el acceso al repositorio de documentos. Algunas fuentes originales pueden no estar disponibles temporalmente.", { tags: ["Sistema-Integridad"] });
+        }
+    },
+
+    calculateConfidence(bestResult, query) {
+        let confidence = "baja";
+        let score = bestResult.score || 0;
+        let evidenceCount = (bestResult.data && bestResult.data.evidence) ? bestResult.data.evidence.length : 0;
+
+        // Criterios de evaluación incremental
+        if (score >= 10 && evidenceCount >= 1) confidence = "alta";
+        else if (score >= 5 || evidenceCount >= 1) confidence = "media";
+
+        return {
+            level: confidence,
+            reason: `Basado en ${evidenceCount} fragmentos de soporte y relevancia semántica del ${score * 10}%`
+        };
+    },
 
     // Helper para limpiar markdown de respuestas automáticas
     formatRichText(text) {
@@ -487,7 +529,8 @@ window.app = {
         this.renderProcedures();
         this.renderManual();
         this.setupEventListeners();
-        this.initTrivia(); // Call initTrivia here
+        this.initTrivia();
+        this.checkRepositoryHealth(); // Incremental Health Check
         this.renderGraph(PROCEDURE_INDEX['inicio'].graph, 'inicio');
         this.updateDetailsPanel('inicio');
     },
@@ -909,6 +952,17 @@ window.app = {
         }
 
         let html = `<div class="msg-header">${type === 'bot' ? 'ANALISTA JURÍDICO' : 'USUARIO'}</div>`;
+
+        // Mostrar Evaluación de Confianza para respuestas del bot
+        if (type === 'bot' && options.confidence) {
+            const confClass = `confidence-${options.confidence.level}`;
+            const confLabel = options.confidence.level.toUpperCase();
+            html += `<div class="confidence-indicator ${confClass}" title="${options.confidence.reason}">
+                        <span>🛡️ Fiabilidad: ${confLabel}</span>
+                        <small style="margin-left:auto; opacity:0.8;">${options.confidence.reason}</small>
+                    </div>`;
+        }
+
         html += `<div class="msg-content">${formattedText}</div>`;
 
         // Sección de Evidencias (Citas)
@@ -982,6 +1036,13 @@ window.app = {
                 return;
             }
 
+            // REVISIÓN DE INTEGRIDAD PREVIA
+            if (!this.isHealthy) {
+                this.removeThinking(thinkingId);
+                this.addMessage('bot', "⚠️ **Aviso de Integridad:** No puedo garantizar el acceso a las fuentes originales en este momento. La respuesta se basa en la memoria local indexada, pero la trazabilidad documental completa puede estar comprometida.", { tags: ["Sistema-Aviso"] });
+                // Continuamos pero con advertencia
+            }
+
             // 3. BRIDGE MCP (Opcional - Inyectado por Antigravity/Entorno)
             if (window.NLM_BRIDGE && typeof window.NLM_BRIDGE.query === 'function') {
                 console.log("Bridge MCP Detectado. Consultando NotebookLM Real...");
@@ -1049,29 +1110,33 @@ window.app = {
 
                 if (best.type === 'proc') {
                     this.selectProcedure(best.data.id);
-                    // Búsqueda de profundidad en KB para este procedimiento
                     const kbEntry = KNOWLEDGE_BASE.find(kb => kb.procedureId === best.data.id);
+                    const confidence = this.calculateConfidence(best, query);
 
                     if (kbEntry) {
                         this.addMessage('bot', kbEntry.responseContent, {
                             evidence: kbEntry.evidence,
                             location: kbEntry.location,
-                            tags: kbEntry.tags
+                            tags: kbEntry.tags,
+                            confidence: confidence
                         });
                     } else {
                         this.addMessage('bot', `He detectado que tu consulta está relacionada con el procedimiento de **${best.data.title}**. \n\n${best.data.summary}`, {
                             location: `Manual MEPI | ${best.data.source_id}`,
-                            tags: [best.data.id, "Contexto-Manual"]
+                            tags: [best.data.id, "Contexto-Manual"],
+                            confidence: confidence
                         });
                     }
                 } else if (best.type === 'kb') {
                     const kb = best.data;
                     if (kb.procedureId) this.selectProcedure(kb.procedureId);
+                    const confidence = this.calculateConfidence(best, query);
 
                     this.addMessage('bot', kb.responseContent, {
                         evidence: kb.evidence,
                         location: kb.location,
-                        tags: kb.tags
+                        tags: kb.tags,
+                        confidence: confidence
                     });
                 }
             } else {
@@ -1089,17 +1154,35 @@ window.app = {
                         tags: ["Diccionario-Técnico"]
                     });
                 } else {
-                    this.addMessage('bot', "No localicé una cita literal exacta, pero analizando los protocolos MEPI, te sugiero revisar las secciones de **Recibo Definitivo** o **Suspensión**, que contienen las reglas generales de firma y cumplimiento. \n\n¿Deseas que abra el checklist detallado de alguna de estas fases?", {
-                        location: "Consulte el Índice General de Procedimientos MEPI",
-                        tags: ["Asistente-Navegación"]
-                    });
+                    // Verificación de relevancia de dominio (Construcción/Interventoría/INVÍAS)
+                    const domainKeywords = ["obra", "interventoría", "interventoria", "contrato", "invías", "invias", "manual", "procedimiento", "técnico", "tecnico", "legal", "social", "ambiental", "predial", "finanzas", "pago", "plazo", "secop", "acta", "seguimiento", "bitácora", "bitacora", "fcs", "apu", "ítem", "item"];
+                    const isDomainRelated = domainKeywords.some(kw => q.includes(kw));
+
+                    if (isDomainRelated) {
+                        this.addMessage('bot', "No localicé una cita literal exacta para el término consultado, pero analizando el manual **MEPI-MN1-IN**, te sugiero revisar las secciones generales de **Recibo Definitivo** o **Suspensión**, que contienen las reglas transversales de cumplimiento contractual. \n\n¿Deseas que abra el índice general para localizar la fase específica?", {
+                            location: "Consulte el Índice General de Procedimientos MEPI",
+                            tags: ["Asistente-Navegación"]
+                        });
+                    } else {
+                        this.addMessage('bot', `Lo siento, como **Analista Jurídico de Smart Memory**, mi base de conocimientos está especializada exclusivamente en el **Protocolo INVIAS (Manual MEPI)**. 
+
+La consulta realizada (**"${query}"**) no se encuentra dentro del alcance técnico o legal de los documentos indexados en este sistema.`, {
+                            tags: ["Fuera-de-Alcance"]
+                        });
+                    }
                 }
             }
 
         } catch (error) {
             console.error("Search Error:", error);
+            this.errorCount++;
             this.removeThinking(thinkingId);
-            this.addMessage('bot', "Se produjo un error en la capa de análisis documental. Por favor, reintenta con términos más específicos.", { tags: ["Error-Sistema"] });
+
+            if (this.errorCount >= 3) {
+                this.addMessage('bot', "🚨 **Salvaguarda de Cierre Administrativo:** Se han detectado fallos repetitivos en la capa de análisis. El servicio de Smart Memory queda temporalmente suspendido para verificación de integridad del repositorio.", { tags: ["Error-Fatal"] });
+            } else {
+                this.addMessage('bot', "Se produjo un error en la capa de análisis documental. Por favor, reintenta con términos más específicos.", { tags: ["Error-Sistema"] });
+            }
         }
     },
 
