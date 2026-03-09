@@ -470,6 +470,25 @@ body {
     justify-content: space-between;
     background: #fff;
     border-bottom: 2px solid var(--border);
+    position: relative;
+    z-index: 10;
+}
+
+.mobile-toggle-btn {
+    display: none;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile-toggle-btn svg {
+    width: 24px;
+    height: 24px;
+    fill: var(--text-main);
 }
 
 .view-title h2 {
@@ -990,6 +1009,11 @@ textarea {
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
 }
 
+.modal-body {
+    overflow-x: auto;
+    width: 100%;
+}
+
 .checklist-table {
     width: 100%;
     border-collapse: collapse;
@@ -1367,4 +1391,133 @@ textarea {
 .flow-arrow {
     height: 18px !important;
     margin: 2px 0 !important;
+}
+
+/* RESPONSIVE DESIGN - BREAKPOINTS */
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 90;
+    backdrop-filter: blur(2px);
+}
+
+@media (max-width: 1200px) {
+    :root {
+        --details-width: 300px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .app-container {
+        position: relative;
+    }
+
+    .sidebar {
+        position: absolute;
+        left: -100%;
+        top: 0;
+        z-index: 100;
+        transition: left 0.3s ease;
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
+
+    .mobile-toggle-btn {
+        display: flex;
+    }
+
+    .main-header {
+        padding: 0 15px;
+    }
+
+    .search-bar input {
+        width: 180px;
+    }
+
+    .sidebar-overlay.open {
+        display: block;
+    }
+}
+
+@media (max-width: 850px) {
+    .details-panel {
+        position: absolute;
+        right: -100%;
+        top: 0;
+        z-index: 100;
+        height: 100%;
+        transition: right 0.3s ease;
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .details-panel.open {
+        right: 0;
+    }
+
+    .chat-container {
+        padding: 15px 20px;
+    }
+
+    .chat-input-area {
+        padding: 15px 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .view-title h2 {
+        font-size: 1rem;
+    }
+
+    .view-title p {
+        font-size: 0.75rem;
+    }
+
+    .search-bar {
+        display: none;
+        /* Hide on very small screens to save space */
+    }
+
+    .bot-message,
+    .user-message {
+        max-width: 95%;
+        font-size: 0.88rem;
+    }
+
+    .modal-content.large {
+        width: 98%;
+        padding: 15px;
+    }
+
+    .checklist-table th,
+    .checklist-table td {
+        padding: 8px 5px;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-height: 600px) {
+    .main-header {
+        height: 50px;
+    }
+
+    .chat-input-area {
+        padding: 10px 20px;
+    }
+
+    .input-wrapper {
+        padding: 5px 10px;
+    }
+
+    textarea {
+        height: 30px;
+    }
 }

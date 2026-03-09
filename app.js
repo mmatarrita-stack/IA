@@ -441,6 +441,40 @@ window.app = {
     errorCount: 0,
     isHealthy: true,
 
+    // UI Responsive Helpers
+    toggleSidebar(show) {
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        if (show) {
+            sidebar.classList.add('open');
+            overlay.classList.add('open');
+        } else {
+            sidebar.classList.remove('open');
+            if (!document.querySelector('.details-panel.open')) {
+                overlay.classList.remove('open');
+            }
+        }
+    },
+
+    toggleDetails(show) {
+        const panel = document.querySelector('.details-panel');
+        const overlay = document.getElementById('sidebar-overlay');
+        if (show) {
+            panel.classList.add('open');
+            overlay.classList.add('open');
+        } else {
+            panel.classList.remove('open');
+            if (!document.querySelector('.sidebar.open')) {
+                overlay.classList.remove('open');
+            }
+        }
+    },
+
+    closeAllPanels() {
+        this.toggleSidebar(false);
+        this.toggleDetails(false);
+    },
+
     async checkRepositoryHealth() {
         console.log("Checking repository integrity...");
         const badge = document.querySelector('.status-badge');
@@ -695,7 +729,11 @@ window.app = {
 
         this.renderGraph(proc.graph, id);
         this.updateDetailsPanel(id);
-        // Switch will be handled by the caller if needed
+
+        // On mobile, if choosing from sidebar, we might want to close it to show the content
+        if (window.innerWidth <= 1024) {
+            this.toggleSidebar(false);
+        }
     },
 
     updateDetailsPanel(id) {
@@ -1326,6 +1364,11 @@ La consulta realizada (**"${query}"**) no se encuentra dentro del alcance técni
     switchSideTab(tabId, event) {
         if (event) event.preventDefault();
         console.log("Cambiando a pestaña:", tabId);
+
+        // Ensure the panel is visible on mobile when switching tabs
+        if (window.innerWidth <= 850) {
+            this.toggleDetails(true);
+        }
 
         // Tab links
         document.querySelectorAll('.tab-link').forEach(btn => {

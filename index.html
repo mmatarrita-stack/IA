@@ -34,6 +34,11 @@
         <!-- Main Content -->
         <main class="main-content">
             <header class="main-header">
+                <button id="mobile-menu-toggle" class="mobile-toggle-btn" onclick="app.toggleSidebar(true)">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+                    </svg>
+                </button>
                 <div class="view-title">
                     <h2 id="current-procedure-title">Panel de Control General</h2>
                     <p id="current-procedure-subtitle">Asesoría Técnica y Legal</p>
@@ -42,6 +47,12 @@
                     <div class="search-bar">
                         <input type="text" placeholder="Buscar en el manual..." id="global-search">
                     </div>
+                    <button id="mobile-details-toggle" class="mobile-toggle-btn" onclick="app.toggleDetails(true)">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 9h2V7h-2v2z" />
+                        </svg>
+                    </button>
                 </div>
             </header>
 
@@ -172,6 +183,8 @@
             </footer>
         </div>
     </div>
+
+    <div id="sidebar-overlay" class="sidebar-overlay" onclick="app.closeAllPanels()"></div>
 
     <script src="app.js"></script>
 </body>
